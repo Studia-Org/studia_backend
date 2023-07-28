@@ -1,0 +1,69 @@
+{
+  "kind": "collectionType",
+  "collectionName": "activities",
+  "info": {
+    "singularName": "activity",
+    "pluralName": "activities",
+    "displayName": "Activity",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "required": true
+    },
+    "qualification": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "deadline": {
+      "type": "datetime",
+      "required": true
+    },
+    "comments": {
+      "type": "text",
+      "minLength": 1
+    },
+    "evaluator": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "ponderation": {
+      "type": "decimal",
+      "min": 0,
+      "max": 1
+    },
+    "type": {
+      "type": "string",
+      "required": true,
+      "minLength": 1
+    },
+    "file": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "videos",
+        "audios",
+        "files"
+      ]
+    },
+    "description": {
+      "type": "richtext",
+      "minLength": 1
+    },
+    "order": {
+      "min": 1,
+      "required": true,
+      "type": "integer"
+    }
+  }
+}

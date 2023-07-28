@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "paragraphs",
+  "info": {
+    "singularName": "paragraph",
+    "pluralName": "paragraphs",
+    "displayName": "Paragraph"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "text": {
+      "type": "richtext",
+      "required": true,
+      "minLength": 1
+    },
+    "order": {
+      "type": "integer",
+      "min": 1,
+      "required": true
+    }
+  }
+}
