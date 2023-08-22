@@ -41,6 +41,22 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::paragraph.paragraph"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 150,
+      "minLength": 1,
+      "required": true
+    },
+    "landscape_photo": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
     }
   }
 }

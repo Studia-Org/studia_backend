@@ -108,6 +108,16 @@
       "maxLength": 50,
       "unique": false,
       "required": true
+    },
+    "role_str": {
+      "type": "string",
+      "required": true
+    },
+    "calendar_events": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::calendar-event.calendar-event",
+      "inversedBy": "users"
     }
   }
 }

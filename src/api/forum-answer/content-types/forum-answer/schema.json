@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "forum_answers",
+  "info": {
+    "singularName": "forum-answer",
+    "pluralName": "forum-answers",
+    "displayName": "Forum Answer",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "content": {
+      "type": "richtext",
+      "minLength": 1
+    },
+    "parent": {
+      "type": "uid"
+    },
+    "autor": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}
