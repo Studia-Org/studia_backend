@@ -23,6 +23,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "forum_posts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::forum-post.forum-post",
+      "inversedBy": "forum_answers"
     }
   }
 }

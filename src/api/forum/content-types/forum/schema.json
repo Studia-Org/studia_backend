@@ -4,7 +4,8 @@
   "info": {
     "singularName": "forum",
     "pluralName": "forums",
-    "displayName": "Forum"
+    "displayName": "Forum",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -15,6 +16,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::course.course"
+    },
+    "posts": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::forum-post.forum-post",
+      "inversedBy": "forums"
     }
   }
 }

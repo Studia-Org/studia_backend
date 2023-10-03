@@ -36,8 +36,15 @@
     },
     "forum_answers": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::forum-answer.forum-answer"
+      "relation": "manyToMany",
+      "target": "api::forum-answer.forum-answer",
+      "mappedBy": "forum_posts"
+    },
+    "forums": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::forum.forum",
+      "inversedBy": "posts"
     }
   }
 }

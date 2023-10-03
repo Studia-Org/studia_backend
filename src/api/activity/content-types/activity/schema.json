@@ -17,23 +17,9 @@
       "minLength": 1,
       "required": true
     },
-    "qualification": {
-      "type": "decimal",
-      "required": true,
-      "min": 0
-    },
     "deadline": {
       "type": "datetime",
       "required": true
-    },
-    "comments": {
-      "type": "text",
-      "minLength": 1
-    },
-    "evaluator": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user"
     },
     "ponderation": {
       "type": "decimal",
@@ -64,12 +50,6 @@
       "min": 1,
       "required": true,
       "type": "integer"
-    },
-    "delivered": {
-      "type": "boolean"
-    },
-    "evaluated": {
-      "type": "boolean"
     }
   }
 }
