@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_response_questionnaires",
+  "info": {
+    "singularName": "user-response-questionnaire",
+    "pluralName": "user-response-questionnaires",
+    "displayName": "UserResponseQuestionnaire",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "user_response_questionnaires"
+    },
+    "questionnaire": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::questionnaire.questionnaire"
+    },
+    "responses": {
+      "type": "json"
+    },
+    "finished": {
+      "type": "boolean"
+    }
+  }
+}

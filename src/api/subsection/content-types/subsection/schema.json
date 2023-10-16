@@ -49,14 +49,26 @@
       "required": true
     },
     "landscape_photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
+    },
+    "questionnaire": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::questionnaire.questionnaire"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "subsections_completed"
     }
   }
 }

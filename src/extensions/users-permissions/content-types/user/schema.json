@@ -118,6 +118,24 @@
       "relation": "manyToMany",
       "target": "api::calendar-event.calendar-event",
       "inversedBy": "users"
+    },
+    "user_response_questionnaires": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::user-response-questionnaire.user-response-questionnaire",
+      "mappedBy": "user"
+    },
+    "subsections_completed": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::subsection.subsection",
+      "inversedBy": "users"
+    },
+    "qualifications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::qualification.qualification",
+      "mappedBy": "user"
     }
   }
 }
