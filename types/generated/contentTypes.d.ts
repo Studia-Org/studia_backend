@@ -1141,6 +1141,7 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
       'plugin::users-permissions.user'
     >;
     qualification: Attribute.Decimal;
+    file: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
