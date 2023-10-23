@@ -9,12 +9,10 @@
     "build": "strapi build",
     "strapi": "strapi"
   },
-  "devDependencies": {},
   "dependencies": {
-    "@strapi/plugin-i18n": "4.14.0",
-    "@strapi/plugin-users-permissions": "4.14.0",
-    "@strapi/provider-upload-cloudinary": "4.14.0",
-    "@strapi/strapi": "4.14.0",
+    "@strapi/plugin-users-permissions": "4.14.5",
+    "@strapi/provider-upload-cloudinary": "4.14.5",
+    "@strapi/strapi": "4.14.5",
     "pg": "8.8.0"
   },
   "author": {
