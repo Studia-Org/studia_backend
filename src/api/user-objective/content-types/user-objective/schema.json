@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_objectives",
+  "info": {
+    "singularName": "user-objective",
+    "pluralName": "user-objectives",
+    "displayName": "User Objective",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "objective": {
+      "type": "string",
+      "minLength": 1,
+      "required": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "user_objectives"
+    },
+    "completed": {
+      "type": "boolean"
+    }
+  }
+}

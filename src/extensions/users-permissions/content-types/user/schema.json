@@ -136,6 +136,12 @@
       "relation": "oneToMany",
       "target": "api::qualification.qualification",
       "mappedBy": "user"
+    },
+    "user_objectives": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::user-objective.user-objective",
+      "mappedBy": "user"
     }
   }
 }

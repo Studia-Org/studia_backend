@@ -661,6 +661,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::qualification.qualification'
     >;
+    user_objectives: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::user-objective.user-objective'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -825,6 +830,11 @@ export interface ApiCourseCourse extends Schema.CollectionType {
       'oneToOne',
       'api::forum.forum'
     >;
+    course_tags: Attribute.Relation<
+      'api::course.course',
+      'manyToMany',
+      'api::course-tag.course-tag'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -836,6 +846,46 @@ export interface ApiCourseCourse extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::course.course',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiCourseTagCourseTag extends Schema.CollectionType {
+  collectionName: 'course_tags';
+  info: {
+    singularName: 'course-tag';
+    pluralName: 'course-tags';
+    displayName: 'Course Tag';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    tag: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1;
+        maxLength: 30;
+      }>;
+    courses: Attribute.Relation<
+      'api::course-tag.course-tag',
+      'manyToMany',
+      'api::course.course'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::course-tag.course-tag',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::course-tag.course-tag',
       'oneToOne',
       'admin::user'
     > &
@@ -1315,6 +1365,47 @@ export interface ApiSubsectionSubsection extends Schema.CollectionType {
   };
 }
 
+export interface ApiUserObjectiveUserObjective extends Schema.CollectionType {
+  collectionName: 'user_objectives';
+  info: {
+    singularName: 'user-objective';
+    pluralName: 'user-objectives';
+    displayName: 'User Objective';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    objective: Attribute.String &
+      Attribute.Required &
+      Attribute.SetMinMaxLength<{
+        minLength: 1;
+      }>;
+    user: Attribute.Relation<
+      'api::user-objective.user-objective',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    completed: Attribute.Boolean;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::user-objective.user-objective',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::user-objective.user-objective',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiUserResponseQuestionnaireUserResponseQuestionnaire
   extends Schema.CollectionType {
   collectionName: 'user_response_questionnaires';
@@ -1376,6 +1467,7 @@ declare module '@strapi/types' {
       'api::activity.activity': ApiActivityActivity;
       'api::calendar-event.calendar-event': ApiCalendarEventCalendarEvent;
       'api::course.course': ApiCourseCourse;
+      'api::course-tag.course-tag': ApiCourseTagCourseTag;
       'api::forum.forum': ApiForumForum;
       'api::forum-answer.forum-answer': ApiForumAnswerForumAnswer;
       'api::forum-post.forum-post': ApiForumPostForumPost;
@@ -1386,6 +1478,7 @@ declare module '@strapi/types' {
       'api::section.section': ApiSectionSection;
       'api::student-activity.student-activity': ApiStudentActivityStudentActivity;
       'api::subsection.subsection': ApiSubsectionSubsection;
+      'api::user-objective.user-objective': ApiUserObjectiveUserObjective;
       'api::user-response-questionnaire.user-response-questionnaire': ApiUserResponseQuestionnaireUserResponseQuestionnaire;
     }
   }
