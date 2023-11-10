@@ -14,8 +14,9 @@
   "attributes": {
     "activity": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::activity.activity"
+      "relation": "manyToOne",
+      "target": "api::activity.activity",
+      "inversedBy": "qualifications"
     },
     "user": {
       "type": "relation",
@@ -47,6 +48,9 @@
     },
     "delivered": {
       "type": "boolean"
+    },
+    "delivered_data": {
+      "type": "datetime"
     }
   }
 }

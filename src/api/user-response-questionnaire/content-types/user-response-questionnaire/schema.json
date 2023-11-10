@@ -28,6 +28,9 @@
     },
     "finished": {
       "type": "boolean"
+    },
+    "timeToComplete": {
+      "type": "time"
     }
   }
 }

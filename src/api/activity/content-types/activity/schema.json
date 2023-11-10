@@ -53,6 +53,12 @@
     },
     "evaluable": {
       "type": "boolean"
+    },
+    "qualifications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::qualification.qualification",
+      "mappedBy": "activity"
     }
   }
 }

@@ -666,6 +666,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::user-objective.user-objective'
     >;
+    log: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::log.log'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -722,6 +727,11 @@ export interface ApiActivityActivity extends Schema.CollectionType {
         min: 1;
       }>;
     evaluable: Attribute.Boolean;
+    qualifications: Attribute.Relation<
+      'api::activity.activity',
+      'oneToMany',
+      'api::qualification.qualification'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1079,6 +1089,34 @@ export interface ApiForumTagForumTag extends Schema.CollectionType {
   };
 }
 
+export interface ApiLogLog extends Schema.CollectionType {
+  collectionName: 'logs';
+  info: {
+    singularName: 'log';
+    pluralName: 'logs';
+    displayName: 'Log';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    logins: Attribute.JSON;
+    user: Attribute.Relation<
+      'api::log.log',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<'api::log.log', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<'api::log.log', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
 export interface ApiParagraphParagraph extends Schema.CollectionType {
   collectionName: 'paragraphs';
   info: {
@@ -1132,7 +1170,7 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
   attributes: {
     activity: Attribute.Relation<
       'api::qualification.qualification',
-      'oneToOne',
+      'manyToOne',
       'api::activity.activity'
     >;
     user: Attribute.Relation<
@@ -1149,6 +1187,7 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
     qualification: Attribute.Decimal;
     file: Attribute.Media;
     delivered: Attribute.Boolean;
+    delivered_data: Attribute.DateTime;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1431,6 +1470,7 @@ export interface ApiUserResponseQuestionnaireUserResponseQuestionnaire
     >;
     responses: Attribute.JSON;
     finished: Attribute.Boolean;
+    timeToComplete: Attribute.Time;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1472,6 +1512,7 @@ declare module '@strapi/types' {
       'api::forum-answer.forum-answer': ApiForumAnswerForumAnswer;
       'api::forum-post.forum-post': ApiForumPostForumPost;
       'api::forum-tag.forum-tag': ApiForumTagForumTag;
+      'api::log.log': ApiLogLog;
       'api::paragraph.paragraph': ApiParagraphParagraph;
       'api::qualification.qualification': ApiQualificationQualification;
       'api::questionnaire.questionnaire': ApiQuestionnaireQuestionnaire;
