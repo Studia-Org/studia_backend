@@ -59,6 +59,12 @@
       "relation": "oneToMany",
       "target": "api::qualification.qualification",
       "mappedBy": "activity"
+    },
+    "evaluators": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "activities"
     }
   }
 }

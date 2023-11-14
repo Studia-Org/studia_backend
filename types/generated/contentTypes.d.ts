@@ -671,6 +671,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToOne',
       'api::log.log'
     >;
+    activities: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToMany',
+      'api::activity.activity'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -731,6 +736,11 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       'api::activity.activity',
       'oneToMany',
       'api::qualification.qualification'
+    >;
+    evaluators: Attribute.Relation<
+      'api::activity.activity',
+      'manyToMany',
+      'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

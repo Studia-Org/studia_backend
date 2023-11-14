@@ -148,6 +148,12 @@
       "relation": "oneToOne",
       "target": "api::log.log",
       "inversedBy": "user"
+    },
+    "activities": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::activity.activity",
+      "inversedBy": "evaluators"
     }
   }
 }
