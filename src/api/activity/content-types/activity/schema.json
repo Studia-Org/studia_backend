@@ -65,6 +65,15 @@
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "mappedBy": "activities"
+    },
+    "categories": {
+      "type": "customField",
+      "options": [
+        "Team Work",
+        "List Comprehension",
+        "Mark"
+      ],
+      "customField": "plugin::multi-select.multi-select"
     }
   }
 }
