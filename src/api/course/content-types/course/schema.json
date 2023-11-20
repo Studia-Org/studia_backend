@@ -66,11 +66,8 @@
       "relation": "oneToOne",
       "target": "api::forum.forum"
     },
-    "course_tags": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::course-tag.course-tag",
-      "mappedBy": "courses"
+    "tags": {
+      "type": "json"
     }
   }
 }

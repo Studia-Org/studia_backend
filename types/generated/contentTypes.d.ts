@@ -850,11 +850,7 @@ export interface ApiCourseCourse extends Schema.CollectionType {
       'oneToOne',
       'api::forum.forum'
     >;
-    course_tags: Attribute.Relation<
-      'api::course.course',
-      'manyToMany',
-      'api::course-tag.course-tag'
-    >;
+    tags: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -866,46 +862,6 @@ export interface ApiCourseCourse extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::course.course',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiCourseTagCourseTag extends Schema.CollectionType {
-  collectionName: 'course_tags';
-  info: {
-    singularName: 'course-tag';
-    pluralName: 'course-tags';
-    displayName: 'Course Tag';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    tag: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-        maxLength: 30;
-      }>;
-    courses: Attribute.Relation<
-      'api::course-tag.course-tag',
-      'manyToMany',
-      'api::course.course'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::course-tag.course-tag',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::course-tag.course-tag',
       'oneToOne',
       'admin::user'
     > &
@@ -1396,6 +1352,7 @@ export interface ApiSubsectionSubsection extends Schema.CollectionType {
       'manyToMany',
       'plugin::users-permissions.user'
     >;
+    content: Attribute.RichText;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1517,7 +1474,6 @@ declare module '@strapi/types' {
       'api::activity.activity': ApiActivityActivity;
       'api::calendar-event.calendar-event': ApiCalendarEventCalendarEvent;
       'api::course.course': ApiCourseCourse;
-      'api::course-tag.course-tag': ApiCourseTagCourseTag;
       'api::forum.forum': ApiForumForum;
       'api::forum-answer.forum-answer': ApiForumAnswerForumAnswer;
       'api::forum-post.forum-post': ApiForumPostForumPost;
