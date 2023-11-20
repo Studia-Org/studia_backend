@@ -742,6 +742,11 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       'manyToMany',
       'plugin::users-permissions.user'
     >;
+    categories: Attribute.JSON &
+      Attribute.CustomField<
+        'plugin::multi-select.multi-select',
+        ['Team Work', 'List Comprehension', 'Mark']
+      >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1394,6 +1399,11 @@ export interface ApiUserObjectiveUserObjective extends Schema.CollectionType {
       'plugin::users-permissions.user'
     >;
     completed: Attribute.Boolean;
+    categories: Attribute.JSON &
+      Attribute.CustomField<
+        'plugin::multi-select.multi-select',
+        ['Team Work', 'List Comprehension', 'Mark']
+      >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
