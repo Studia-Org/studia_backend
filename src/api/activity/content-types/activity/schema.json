@@ -71,7 +71,12 @@
       "options": [
         "Team Work",
         "List Comprehension",
-        "Mark"
+        "Mark",
+        "Homework",
+        "Project",
+        "Exam",
+        "Quiz",
+        "Other"
       ],
       "customField": "plugin::multi-select.multi-select"
     }

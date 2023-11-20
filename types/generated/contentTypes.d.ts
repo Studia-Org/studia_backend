@@ -745,7 +745,16 @@ export interface ApiActivityActivity extends Schema.CollectionType {
     categories: Attribute.JSON &
       Attribute.CustomField<
         'plugin::multi-select.multi-select',
-        ['Team Work', 'List Comprehension', 'Mark']
+        [
+          'Team Work',
+          'List Comprehension',
+          'Mark',
+          'Homework',
+          'Project',
+          'Exam',
+          'Quiz',
+          'Other'
+        ]
       >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1239,6 +1248,11 @@ export interface ApiSectionSection extends Schema.CollectionType {
       'api::section.section',
       'oneToMany',
       'api::subsection.subsection'
+    >;
+    activity: Attribute.Relation<
+      'api::section.section',
+      'oneToOne',
+      'api::activity.activity'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
