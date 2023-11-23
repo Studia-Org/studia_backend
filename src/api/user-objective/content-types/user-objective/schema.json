@@ -23,14 +23,20 @@
       "inversedBy": "user_objectives"
     },
     "completed": {
-      "type": "boolean"
+      "type": "boolean",
+      "required": false,
+      "default": false
     },
     "categories": {
       "type": "customField",
       "options": [
         "Team Work",
         "List Comprehension",
-        "Mark"
+        "Mark",
+        "Homework",
+        "Project",
+        "Exam",
+        "Quiz"
       ],
       "customField": "plugin::multi-select.multi-select"
     }

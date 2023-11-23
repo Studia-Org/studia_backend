@@ -752,8 +752,7 @@ export interface ApiActivityActivity extends Schema.CollectionType {
           'Homework',
           'Project',
           'Exam',
-          'Quiz',
-          'Other'
+          'Quiz'
         ]
       >;
     createdAt: Attribute.DateTime;
@@ -1168,6 +1167,11 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
     file: Attribute.Media;
     delivered: Attribute.Boolean;
     delivered_data: Attribute.DateTime;
+    PeerReviewQualification: Attribute.Relation<
+      'api::qualification.qualification',
+      'oneToOne',
+      'api::qualification.qualification'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1412,11 +1416,19 @@ export interface ApiUserObjectiveUserObjective extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-    completed: Attribute.Boolean;
+    completed: Attribute.Boolean & Attribute.DefaultTo<false>;
     categories: Attribute.JSON &
       Attribute.CustomField<
         'plugin::multi-select.multi-select',
-        ['Team Work', 'List Comprehension', 'Mark']
+        [
+          'Team Work',
+          'List Comprehension',
+          'Mark',
+          'Homework',
+          'Project',
+          'Exam',
+          'Quiz'
+        ]
       >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

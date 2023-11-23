@@ -51,6 +51,11 @@
     },
     "delivered_data": {
       "type": "datetime"
+    },
+    "PeerReviewQualification": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::qualification.qualification"
     }
   }
 }
