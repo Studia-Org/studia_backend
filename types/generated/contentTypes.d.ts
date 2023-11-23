@@ -1376,6 +1376,7 @@ export interface ApiSubsectionSubsection extends Schema.CollectionType {
       'plugin::users-permissions.user'
     >;
     content: Attribute.RichText;
+    files: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
