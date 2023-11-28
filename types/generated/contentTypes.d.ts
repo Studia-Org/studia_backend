@@ -1173,6 +1173,7 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
       'oneToOne',
       'api::qualification.qualification'
     >;
+    PeerReviewAnswers: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
