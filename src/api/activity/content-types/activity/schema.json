@@ -75,8 +75,7 @@
         "Homework",
         "Project",
         "Exam",
-        "Quiz",
-        "Other"
+        "Quiz"
       ],
       "customField": "plugin::multi-select.multi-select"
     },

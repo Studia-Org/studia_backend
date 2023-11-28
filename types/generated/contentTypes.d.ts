@@ -752,8 +752,7 @@ export interface ApiActivityActivity extends Schema.CollectionType {
           'Homework',
           'Project',
           'Exam',
-          'Quiz',
-          'Other'
+          'Quiz'
         ]
       >;
     PeerReviewRubrica: Attribute.JSON;
@@ -1378,6 +1377,7 @@ export interface ApiSubsectionSubsection extends Schema.CollectionType {
       'plugin::users-permissions.user'
     >;
     content: Attribute.RichText;
+    files: Attribute.Media;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1422,7 +1422,15 @@ export interface ApiUserObjectiveUserObjective extends Schema.CollectionType {
     categories: Attribute.JSON &
       Attribute.CustomField<
         'plugin::multi-select.multi-select',
-        ['Team Work', 'List Comprehension', 'Mark']
+        [
+          'Team Work',
+          'List Comprehension',
+          'Mark',
+          'Homework',
+          'Project',
+          'Exam',
+          'Quiz'
+        ]
       >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
