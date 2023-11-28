@@ -79,6 +79,9 @@
         "Other"
       ],
       "customField": "plugin::multi-select.multi-select"
+    },
+    "PeerReviewRubrica": {
+      "type": "json"
     }
   }
 }

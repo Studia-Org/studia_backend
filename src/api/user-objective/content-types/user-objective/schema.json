@@ -23,7 +23,8 @@
       "inversedBy": "user_objectives"
     },
     "completed": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "categories": {
       "type": "customField",
