@@ -54,7 +54,8 @@
     "sections": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::section.section"
+      "target": "api::section.section",
+      "mappedBy": "course"
     },
     "professor": {
       "type": "relation",

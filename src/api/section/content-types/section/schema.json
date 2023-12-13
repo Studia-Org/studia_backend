@@ -25,7 +25,14 @@
     "activity": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::activity.activity"
+      "target": "api::activity.activity",
+      "inversedBy": "section"
+    },
+    "course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course.course",
+      "inversedBy": "sections"
     }
   }
 }
