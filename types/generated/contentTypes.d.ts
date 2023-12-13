@@ -756,6 +756,11 @@ export interface ApiActivityActivity extends Schema.CollectionType {
         ]
       >;
     PeerReviewRubrica: Attribute.JSON;
+    section: Attribute.Relation<
+      'api::activity.activity',
+      'oneToOne',
+      'api::section.section'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1379,6 +1384,11 @@ export interface ApiSubsectionSubsection extends Schema.CollectionType {
     >;
     content: Attribute.RichText;
     files: Attribute.Media;
+    section: Attribute.Relation<
+      'api::subsection.subsection',
+      'manyToOne',
+      'api::section.section'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

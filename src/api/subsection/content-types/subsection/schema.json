@@ -82,6 +82,12 @@
       ],
       "type": "media",
       "multiple": true
+    },
+    "section": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::section.section",
+      "inversedBy": "subsections"
     }
   }
 }

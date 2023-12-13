@@ -20,7 +20,8 @@
     "subsections": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::subsection.subsection"
+      "target": "api::subsection.subsection",
+      "mappedBy": "section"
     },
     "activity": {
       "type": "relation",

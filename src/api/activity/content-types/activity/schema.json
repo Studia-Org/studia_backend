@@ -81,6 +81,12 @@
     },
     "PeerReviewRubrica": {
       "type": "json"
+    },
+    "section": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::section.section",
+      "mappedBy": "activity"
     }
   }
 }
