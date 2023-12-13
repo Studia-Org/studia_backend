@@ -1265,6 +1265,11 @@ export interface ApiSectionSection extends Schema.CollectionType {
       'oneToOne',
       'api::activity.activity'
     >;
+    course: Attribute.Relation<
+      'api::section.section',
+      'manyToOne',
+      'api::course.course'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
