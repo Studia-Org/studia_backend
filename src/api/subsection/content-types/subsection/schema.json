@@ -32,9 +32,9 @@
     "end_date": {
       "type": "datetime"
     },
-    "activities": {
+    "activity": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "api::activity.activity"
     },
     "paragraphs": {
@@ -74,14 +74,15 @@
       "type": "richtext"
     },
     "files": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": true
+      ]
     },
     "section": {
       "type": "relation",

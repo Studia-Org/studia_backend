@@ -1360,9 +1360,9 @@ export interface ApiSubsectionSubsection extends Schema.CollectionType {
       Attribute.DefaultTo<false>;
     start_date: Attribute.DateTime;
     end_date: Attribute.DateTime;
-    activities: Attribute.Relation<
+    activity: Attribute.Relation<
       'api::subsection.subsection',
-      'oneToMany',
+      'oneToOne',
       'api::activity.activity'
     >;
     paragraphs: Attribute.Relation<
