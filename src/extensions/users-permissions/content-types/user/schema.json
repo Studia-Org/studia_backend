@@ -154,6 +154,12 @@
       "relation": "manyToMany",
       "target": "api::activity.activity",
       "inversedBy": "evaluators"
+    },
+    "notifications": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::notification.notification",
+      "mappedBy": "user"
     }
   }
 }

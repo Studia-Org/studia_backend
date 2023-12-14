@@ -676,6 +676,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToMany',
       'api::activity.activity'
     >;
+    notifications: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::notification.notification'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1093,6 +1098,44 @@ export interface ApiLogLog extends Schema.CollectionType {
     createdBy: Attribute.Relation<'api::log.log', 'oneToOne', 'admin::user'> &
       Attribute.Private;
     updatedBy: Attribute.Relation<'api::log.log', 'oneToOne', 'admin::user'> &
+      Attribute.Private;
+  };
+}
+
+export interface ApiNotificationNotification extends Schema.CollectionType {
+  collectionName: 'notifications';
+  info: {
+    singularName: 'notification';
+    pluralName: 'notifications';
+    displayName: 'Notification';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    content: Attribute.Text;
+    read: Attribute.Boolean;
+    user: Attribute.Relation<
+      'api::notification.notification',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    type: Attribute.String;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::notification.notification',
+      'oneToOne',
+      'admin::user'
+    > &
       Attribute.Private;
   };
 }
@@ -1518,6 +1561,7 @@ declare module '@strapi/types' {
       'api::forum-post.forum-post': ApiForumPostForumPost;
       'api::forum-tag.forum-tag': ApiForumTagForumTag;
       'api::log.log': ApiLogLog;
+      'api::notification.notification': ApiNotificationNotification;
       'api::paragraph.paragraph': ApiParagraphParagraph;
       'api::qualification.qualification': ApiQualificationQualification;
       'api::questionnaire.questionnaire': ApiQuestionnaireQuestionnaire;
