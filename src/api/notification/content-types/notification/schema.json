@@ -14,17 +14,20 @@
     "content": {
       "type": "text"
     },
-    "read": {
-      "type": "boolean"
-    },
-    "user": {
+    "users": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
       "inversedBy": "notifications"
     },
     "type": {
       "type": "string"
+    },
+    "link": {
+      "type": "string"
+    },
+    "readJSON": {
+      "type": "json"
     }
   }
 }

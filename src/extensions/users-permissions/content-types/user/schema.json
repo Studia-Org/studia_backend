@@ -157,9 +157,9 @@
     },
     "notifications": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "manyToMany",
       "target": "api::notification.notification",
-      "mappedBy": "user"
+      "mappedBy": "users"
     }
   }
 }
