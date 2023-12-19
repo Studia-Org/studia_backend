@@ -33,10 +33,6 @@
         "images"
       ]
     },
-    "course_type": {
-      "type": "string",
-      "required": true
-    },
     "start_date": {
       "type": "date",
       "required": true
@@ -62,13 +58,19 @@
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
     },
-    "forum": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::forum.forum"
-    },
     "tags": {
       "type": "json"
+    },
+    "forums": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::forum.forum",
+      "mappedBy": "course"
+    },
+    "evaluators": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
     }
   }
 }

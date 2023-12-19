@@ -125,12 +125,6 @@
       "target": "api::user-response-questionnaire.user-response-questionnaire",
       "mappedBy": "user"
     },
-    "subsections_completed": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::subsection.subsection",
-      "inversedBy": "users"
-    },
     "qualifications": {
       "type": "relation",
       "relation": "oneToMany",
@@ -160,6 +154,12 @@
       "relation": "manyToMany",
       "target": "api::notification.notification",
       "mappedBy": "users"
+    },
+    "subsections_completed": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::subsection.subsection",
+      "mappedBy": "users_who_completed"
     }
   }
 }

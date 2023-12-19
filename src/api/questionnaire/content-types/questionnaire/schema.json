@@ -25,6 +25,17 @@
       "type": "text",
       "minLength": 1,
       "required": true
+    },
+    "user_response_questionnaires": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::user-response-questionnaire.user-response-questionnaire"
+    },
+    "subsection": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::subsection.subsection",
+      "inversedBy": "questionnaire"
     }
   }
 }

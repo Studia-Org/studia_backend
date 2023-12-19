@@ -37,11 +37,6 @@
       "relation": "oneToOne",
       "target": "api::activity.activity"
     },
-    "paragraphs": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::paragraph.paragraph"
-    },
     "description": {
       "type": "string",
       "maxLength": 150,
@@ -62,13 +57,14 @@
     "questionnaire": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::questionnaire.questionnaire"
+      "target": "api::questionnaire.questionnaire",
+      "inversedBy": "subsection"
     },
-    "users": {
+    "users_who_completed": {
       "type": "relation",
       "relation": "manyToMany",
       "target": "plugin::users-permissions.user",
-      "mappedBy": "subsections_completed"
+      "inversedBy": "subsections_completed"
     },
     "content": {
       "type": "richtext"

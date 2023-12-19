@@ -651,11 +651,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::user-response-questionnaire.user-response-questionnaire'
     >;
-    subsections_completed: Attribute.Relation<
-      'plugin::users-permissions.user',
-      'manyToMany',
-      'api::subsection.subsection'
-    >;
     qualifications: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToMany',
@@ -680,6 +675,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'plugin::users-permissions.user',
       'manyToMany',
       'api::notification.notification'
+    >;
+    subsections_completed: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToMany',
+      'api::subsection.subsection'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -721,20 +721,10 @@ export interface ApiActivityActivity extends Schema.CollectionType {
         min: 0;
         max: 1;
       }>;
-    type: Attribute.String &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-      }>;
     file: Attribute.Media;
     description: Attribute.RichText &
       Attribute.SetMinMaxLength<{
         minLength: 1;
-      }>;
-    order: Attribute.Integer &
-      Attribute.Required &
-      Attribute.SetMinMax<{
-        min: 1;
       }>;
     evaluable: Attribute.Boolean;
     qualifications: Attribute.Relation<
@@ -765,6 +755,9 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       'api::activity.activity',
       'oneToOne',
       'api::section.section'
+    >;
+    type: Attribute.Enumeration<
+      ['Peer Review', 'Task', 'Forum', 'Questionnaire']
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -851,7 +844,6 @@ export interface ApiCourseCourse extends Schema.CollectionType {
         maxLength: 300;
       }>;
     cover: Attribute.Media;
-    course_type: Attribute.String & Attribute.Required;
     start_date: Attribute.Date & Attribute.Required;
     end_date: Attribute.Date & Attribute.Required;
     students: Attribute.Relation<
@@ -869,12 +861,17 @@ export interface ApiCourseCourse extends Schema.CollectionType {
       'oneToOne',
       'plugin::users-permissions.user'
     >;
-    forum: Attribute.Relation<
+    tags: Attribute.JSON;
+    forums: Attribute.Relation<
       'api::course.course',
-      'oneToOne',
+      'oneToMany',
       'api::forum.forum'
     >;
-    tags: Attribute.JSON;
+    evaluators: Attribute.Relation<
+      'api::course.course',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -907,7 +904,7 @@ export interface ApiForumForum extends Schema.CollectionType {
   attributes: {
     course: Attribute.Relation<
       'api::forum.forum',
-      'oneToOne',
+      'manyToOne',
       'api::course.course'
     >;
     posts: Attribute.Relation<
@@ -1146,45 +1143,6 @@ export interface ApiNotificationNotification extends Schema.CollectionType {
   };
 }
 
-export interface ApiParagraphParagraph extends Schema.CollectionType {
-  collectionName: 'paragraphs';
-  info: {
-    singularName: 'paragraph';
-    pluralName: 'paragraphs';
-    displayName: 'Paragraph';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    text: Attribute.RichText &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 1;
-      }>;
-    order: Attribute.Integer &
-      Attribute.Required &
-      Attribute.SetMinMax<{
-        min: 1;
-      }>;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::paragraph.paragraph',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::paragraph.paragraph',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiQualificationQualification extends Schema.CollectionType {
   collectionName: 'qualifications';
   info: {
@@ -1264,6 +1222,16 @@ export interface ApiQuestionnaireQuestionnaire extends Schema.CollectionType {
       Attribute.SetMinMaxLength<{
         minLength: 1;
       }>;
+    user_response_questionnaires: Attribute.Relation<
+      'api::questionnaire.questionnaire',
+      'oneToMany',
+      'api::user-response-questionnaire.user-response-questionnaire'
+    >;
+    subsection: Attribute.Relation<
+      'api::questionnaire.questionnaire',
+      'oneToOne',
+      'api::subsection.subsection'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1332,55 +1300,6 @@ export interface ApiSectionSection extends Schema.CollectionType {
   };
 }
 
-export interface ApiStudentActivityStudentActivity
-  extends Schema.CollectionType {
-  collectionName: 'student_activities';
-  info: {
-    singularName: 'student-activity';
-    pluralName: 'student-activities';
-    displayName: 'StudentActivity';
-    description: '';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    delivered: Attribute.Boolean;
-    evaluated: Attribute.Boolean;
-    qualification: Attribute.Decimal;
-    evaluator: Attribute.Relation<
-      'api::student-activity.student-activity',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    activity: Attribute.Relation<
-      'api::student-activity.student-activity',
-      'oneToOne',
-      'api::activity.activity'
-    >;
-    student: Attribute.Relation<
-      'api::student-activity.student-activity',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    publishedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::student-activity.student-activity',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::student-activity.student-activity',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
 export interface ApiSubsectionSubsection extends Schema.CollectionType {
   collectionName: 'subsections';
   info: {
@@ -1409,11 +1328,6 @@ export interface ApiSubsectionSubsection extends Schema.CollectionType {
       'oneToOne',
       'api::activity.activity'
     >;
-    paragraphs: Attribute.Relation<
-      'api::subsection.subsection',
-      'oneToMany',
-      'api::paragraph.paragraph'
-    >;
     description: Attribute.String &
       Attribute.Required &
       Attribute.SetMinMaxLength<{
@@ -1426,7 +1340,7 @@ export interface ApiSubsectionSubsection extends Schema.CollectionType {
       'oneToOne',
       'api::questionnaire.questionnaire'
     >;
-    users: Attribute.Relation<
+    users_who_completed: Attribute.Relation<
       'api::subsection.subsection',
       'manyToMany',
       'plugin::users-permissions.user'
@@ -1578,11 +1492,9 @@ declare module '@strapi/types' {
       'api::forum-tag.forum-tag': ApiForumTagForumTag;
       'api::log.log': ApiLogLog;
       'api::notification.notification': ApiNotificationNotification;
-      'api::paragraph.paragraph': ApiParagraphParagraph;
       'api::qualification.qualification': ApiQualificationQualification;
       'api::questionnaire.questionnaire': ApiQuestionnaireQuestionnaire;
       'api::section.section': ApiSectionSection;
-      'api::student-activity.student-activity': ApiStudentActivityStudentActivity;
       'api::subsection.subsection': ApiSubsectionSubsection;
       'api::user-objective.user-objective': ApiUserObjectiveUserObjective;
       'api::user-response-questionnaire.user-response-questionnaire': ApiUserResponseQuestionnaireUserResponseQuestionnaire;

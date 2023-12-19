@@ -26,11 +26,6 @@
       "min": 0,
       "max": 1
     },
-    "type": {
-      "type": "string",
-      "required": true,
-      "minLength": 1
-    },
     "file": {
       "type": "media",
       "multiple": true,
@@ -45,11 +40,6 @@
     "description": {
       "type": "richtext",
       "minLength": 1
-    },
-    "order": {
-      "min": 1,
-      "required": true,
-      "type": "integer"
     },
     "evaluable": {
       "type": "boolean"
@@ -87,6 +77,15 @@
       "relation": "oneToOne",
       "target": "api::section.section",
       "mappedBy": "activity"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "Peer Review",
+        "Task",
+        "Forum",
+        "Questionnaire"
+      ]
     }
   }
 }
