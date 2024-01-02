@@ -81,10 +81,10 @@
     "type": {
       "type": "enumeration",
       "enum": [
-        "Peer Review",
-        "Task",
-        "Forum",
-        "Questionnaire"
+        "peerReview",
+        "task",
+        "forum",
+        "questionnaire"
       ]
     }
   }

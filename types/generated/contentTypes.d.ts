@@ -757,7 +757,7 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       'api::section.section'
     >;
     type: Attribute.Enumeration<
-      ['Peer Review', 'Task', 'Forum', 'Questionnaire']
+      ['peerReview', 'task', 'forum', 'questionnaire']
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -912,6 +912,7 @@ export interface ApiForumForum extends Schema.CollectionType {
       'manyToMany',
       'api::forum-post.forum-post'
     >;
+    title: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
