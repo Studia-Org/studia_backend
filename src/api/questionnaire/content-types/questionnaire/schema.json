@@ -29,7 +29,8 @@
     "user_response_questionnaires": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::user-response-questionnaire.user-response-questionnaire"
+      "target": "api::user-response-questionnaire.user-response-questionnaire",
+      "mappedBy": "questionnaire"
     },
     "subsection": {
       "type": "relation",

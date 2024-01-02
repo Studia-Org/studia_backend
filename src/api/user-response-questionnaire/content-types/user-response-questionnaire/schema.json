@@ -18,11 +18,6 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "user_response_questionnaires"
     },
-    "questionnaire": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::questionnaire.questionnaire"
-    },
     "responses": {
       "type": "json"
     },
@@ -31,6 +26,12 @@
     },
     "timeToComplete": {
       "type": "time"
+    },
+    "questionnaire": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::questionnaire.questionnaire",
+      "inversedBy": "user_response_questionnaires"
     }
   }
 }
