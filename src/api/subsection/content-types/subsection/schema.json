@@ -58,7 +58,7 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::questionnaire.questionnaire",
-      "inversedBy": "subsection"
+      "mappedBy": "subsection"
     },
     "users_who_completed": {
       "type": "relation",

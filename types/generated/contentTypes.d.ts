@@ -1443,14 +1443,14 @@ export interface ApiUserResponseQuestionnaireUserResponseQuestionnaire
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-    questionnaire: Attribute.Relation<
-      'api::user-response-questionnaire.user-response-questionnaire',
-      'oneToOne',
-      'api::questionnaire.questionnaire'
-    >;
     responses: Attribute.JSON;
     finished: Attribute.Boolean;
     timeToComplete: Attribute.Time;
+    questionnaire: Attribute.Relation<
+      'api::user-response-questionnaire.user-response-questionnaire',
+      'manyToOne',
+      'api::questionnaire.questionnaire'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
