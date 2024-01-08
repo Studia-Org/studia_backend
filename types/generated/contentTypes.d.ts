@@ -759,6 +759,11 @@ export interface ApiActivityActivity extends Schema.CollectionType {
     type: Attribute.Enumeration<
       ['peerReview', 'task', 'forum', 'questionnaire']
     >;
+    taskToReview: Attribute.Relation<
+      'api::activity.activity',
+      'oneToOne',
+      'api::activity.activity'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
