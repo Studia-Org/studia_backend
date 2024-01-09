@@ -716,10 +716,10 @@ export interface ApiActivityActivity extends Schema.CollectionType {
         minLength: 1;
       }>;
     deadline: Attribute.DateTime & Attribute.Required;
-    ponderation: Attribute.Decimal &
+    ponderation: Attribute.Integer &
       Attribute.SetMinMax<{
-        min: 0;
-        max: 1;
+        min: 1;
+        max: 100;
       }>;
     file: Attribute.Media;
     description: Attribute.RichText &
