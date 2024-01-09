@@ -23,7 +23,7 @@
     },
     "ponderation": {
       "type": "integer",
-      "min": 1,
+      "min": 0,
       "max": 100
     },
     "file": {

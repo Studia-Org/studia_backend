@@ -718,7 +718,7 @@ export interface ApiActivityActivity extends Schema.CollectionType {
     deadline: Attribute.DateTime & Attribute.Required;
     ponderation: Attribute.Integer &
       Attribute.SetMinMax<{
-        min: 1;
+        min: 0;
         max: 100;
       }>;
     file: Attribute.Media;
