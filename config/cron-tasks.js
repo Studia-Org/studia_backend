@@ -37,6 +37,7 @@ module.exports = {
                         }
                     )
                 console.log("#############################################################################################################");
+                console.log(new Date());
                 console.log("Activities: ", subsections.length);
 
                 subsections = subsections.filter(subsection => subsection.activity.qualifications.length === 0);
@@ -51,6 +52,7 @@ module.exports = {
                             idMainActivity: subsection?.activity?.taskToReview?.id,
                             idActivityPeerReview: subsection?.activity?.id,
                             startDate: new Date(subsection?.start_date),
+                            usersToPair: subsection?.activity?.usersToPair,
                         }
                     }
                     catch (err) {
@@ -60,25 +62,29 @@ module.exports = {
 
                 subsections = subsections.filter(subsection => subsection !== undefined);
 
-                subsections.forEach(async subsection => {
-                    try {
-                        // call to create activity
-                        console.log("Creating activity for subsection: ", subsection);
-                        const { parejas } = await crearActividadVinculandoUsuarios({ request: { body: subsection } });
-                        console.log(`Activity created with : ${parejas.length} pairs}`);
+                subsections.forEach(
+                    async subsection => {
+                        try {
+                            // call to create activity
+                            console.log("Creating activity for subsection: ", subsection);
+                            const { parejas, error } = await crearActividadVinculandoUsuarios({ request: { body: subsection } });
+                            if (error) throw new Error(error);
+                            console.log(`Activity created with : ${parejas.length} pairs}`);
 
-                    }
-                    catch (err) {
-                        console.log(err);
-                    }
-                })
+                        }
+                        catch (err) {
+                            console.error(err.message);
+                            console.log("#############################################################################################################");
+
+                        }
+                    })
                 console.log("#############################################################################################################");
 
             }
 
             catch (err) {
 
-                console.log(err);
+                console.error(err.message);
                 console.log("#############################################################################################################");
 
             }
@@ -86,7 +92,7 @@ module.exports = {
 
         },
         options: {
-            cron: '0 0 0 * * *', // cada dia a las 00:00:00
+            rule: '0 0 0 * * *', // cada dia a las 00:00:00
             tz: 'Europe/Madrid'
         }
     }

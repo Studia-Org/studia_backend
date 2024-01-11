@@ -1,23 +1,32 @@
-
-function hacerParejas(objeto) {
-
-    let elementos = [...Object.values(objeto)]
-    const esImpar = elementos.length % 2 !== 0;
-    elementos = elementos.sort(() => Math.random() - 0.5);
+function hacerParejas(objeto, usersToPair = 1) {
+    const elementos = [...Object.values(objeto)];
+    const longitud = elementos.length;
+    while (true) {
+        if (longitud < 2 || usersToPair < 1 || usersToPair >= longitud) {
+            if (usersToPair < 1) usersToPair = 1;
+            if (usersToPair >= longitud) usersToPair = longitud - 1;
+            if (longitud < 2) throw new Error('Cannot pair less than 2 users');
+        }
+        else break;
+    }
 
     const parejas = [];
-    for (let i = 0; i < elementos.length; i += 2) {
-        const pareja = [elementos[i], elementos[i + 1]];
+    for (let i = 0; i < longitud; i++) {
+        const pareja = [];
+        pareja.push(elementos[i]);
+        for (let j = 1; j <= usersToPair; j++) {
+            const indexUsuarioACorregir = (i + j) % longitud;
+            // no se puede corregir a uno mismo
+            if (indexUsuarioACorregir !== i) {
+                const usuarioACorregir = elementos[indexUsuarioACorregir];
+                pareja.push(usuarioACorregir);
+            }
+        }
+
         parejas.push(pareja);
     }
-    if (esImpar) {
-        const ultimaPareja = parejas.pop();
-        const ultimoAlumno = elementos[elementos.length - 1];
-        ultimaPareja.push(ultimoAlumno);
-        parejas.push(ultimaPareja);
-    }
 
-    return { parejas, esImpar };
+    return { parejas };
 }
 
 async function obtenerUsuariosDeCurso(idCourse) {
@@ -37,7 +46,7 @@ async function obtenerUsuariosDeCurso(idCourse) {
 module.exports = async function crearActividadVinculandoUsuarios(ctx) {
     try {
 
-        let { idCourse, idMainActivity, idActivityPeerReview, evaluator, startDate } = ctx.request.body;
+        let { idCourse, idMainActivity, idActivityPeerReview, evaluator, startDate, usersToPair = 1 } = ctx.request.body;
         const { curso, usuariosDelCurso } = await obtenerUsuariosDeCurso(idCourse);
 
         if (evaluator === undefined &&
@@ -50,10 +59,9 @@ module.exports = async function crearActividadVinculandoUsuarios(ctx) {
         }
         else if (evaluator === undefined) evaluator = curso.professor.id;
 
+        if (idMainActivity === undefined) throw new Error('idMainActivity cannot be undefined')
 
-        if (idMainActivity === undefined) throw new Error('idMainActivity cannot be undefined');
-        if (idActivityPeerReview === undefined) throw new Error('idActivityPeerReview cannot be undefined');
-
+        if (idActivityPeerReview === undefined) throw new Error('idActivityPeerReview cannot be undefined')
 
         const { qualifications } = await strapi.entityService.
             findOne('api::activity.activity',
@@ -74,36 +82,33 @@ module.exports = async function crearActividadVinculandoUsuarios(ctx) {
                 filter(usuario => usuariosQueHanHechoLaActividad.
                     every(usuarioQueHaHechoLaActividad => usuarioQueHaHechoLaActividad.id !== usuario.id));
 
-        const { parejas, esImpar } = hacerParejas(usuariosQueHanHechoLaActividad);
+        const { parejas } = hacerParejas(usuariosQueHanHechoLaActividad, usersToPair);
 
         for (const pareja of parejas) {
-            const peerReviewQualificationUser1 = qualifications.find(qualification => qualification.user.id === pareja[0].id).id;
-            const peerReviewQualificationUser2 = qualifications.find(qualification => qualification.user.id === pareja[1].id).id;
+            // find qualifications of all users
+            const user = pareja[0];
+            const parejaSinUser = pareja.filter(user => user.id !== pareja[0].id);
 
-            const qualification1 = await strapi.entityService.create('api::qualification.qualification', {
+            const peerReviewqualifications = qualifications.
+                filter(qualification => parejaSinUser.
+                    some(user => user.id === qualification.user.id)).map(qualification => qualification.id);
+            const qualification = await strapi.entityService.create('api::qualification.qualification', {
                 data: {
                     activity: idActivityPeerReview,
-                    user: pareja[0].id,
+                    user: user,
                     evaluator: evaluator,
-                    PeerReviewQualification: peerReviewQualificationUser2,
-                    publishedAt: startDate
-                },
-            });
-            const qualification2 = await strapi.entityService.create('api::qualification.qualification', {
-                data: {
-                    activity: idActivityPeerReview,
-                    user: pareja[1].id,
-                    evaluator: evaluator,
-                    PeerReviewQualification: peerReviewQualificationUser1,
+                    peer_review_qualifications: peerReviewqualifications,
                     publishedAt: startDate
                 },
             });
         }
 
-        ctx.body = { parejas: parejas, usuariosQueNoHanHechoLaActividad: usuariosQueNoHanHechoLaActividad };
+        ctx.body = { parejas };
         return ctx.body;
 
     } catch (err) {
-        ctx.body = err.message || 'Error al crear la actividad';
+        ctx.body = { error: err.message || 'Error al crear la actividad' }
+        return ctx.body;
+
     }
 }

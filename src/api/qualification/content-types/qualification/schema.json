@@ -52,9 +52,9 @@
     "delivered_data": {
       "type": "datetime"
     },
-    "PeerReviewQualification": {
+    "peer_review_qualifications": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::qualification.qualification"
     },
     "PeerReviewAnswers": {

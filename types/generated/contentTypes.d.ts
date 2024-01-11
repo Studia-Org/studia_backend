@@ -759,11 +759,17 @@ export interface ApiActivityActivity extends Schema.CollectionType {
     type: Attribute.Enumeration<
       ['peerReview', 'task', 'forum', 'questionnaire']
     >;
-    taskToReview: Attribute.Relation<
+    task_to_reviews: Attribute.Relation<
       'api::activity.activity',
-      'oneToOne',
+      'oneToMany',
       'api::activity.activity'
     >;
+    usersToPair: Attribute.Integer &
+      Attribute.Required &
+      Attribute.SetMinMax<{
+        min: 1;
+      }> &
+      Attribute.DefaultTo<1>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1181,9 +1187,9 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
     file: Attribute.Media;
     delivered: Attribute.Boolean;
     delivered_data: Attribute.DateTime;
-    PeerReviewQualification: Attribute.Relation<
+    peer_review_qualifications: Attribute.Relation<
       'api::qualification.qualification',
-      'oneToOne',
+      'oneToMany',
       'api::qualification.qualification'
     >;
     PeerReviewAnswers: Attribute.JSON;
