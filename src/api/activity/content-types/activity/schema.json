@@ -87,16 +87,22 @@
         "questionnaire"
       ]
     },
-    "task_to_reviews": {
+    "task_to_review": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::activity.activity"
+      "relation": "oneToOne",
+      "target": "api::activity.activity",
+      "inversedBy": "BeingReviewdBy"
+    },
+    "BeingReviewdBy": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::activity.activity",
+      "inversedBy": "task_to_review"
     },
     "usersToPair": {
       "type": "integer",
       "default": 1,
-      "required": true,
-      "min": 1
+      "required": true
     }
   }
 }

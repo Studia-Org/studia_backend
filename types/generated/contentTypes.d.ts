@@ -681,6 +681,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToMany',
       'api::subsection.subsection'
     >;
+    peer_review_answer: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::peer-review-answer.peer-review-answer'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -759,16 +764,18 @@ export interface ApiActivityActivity extends Schema.CollectionType {
     type: Attribute.Enumeration<
       ['peerReview', 'task', 'forum', 'questionnaire']
     >;
-    task_to_reviews: Attribute.Relation<
+    task_to_review: Attribute.Relation<
       'api::activity.activity',
-      'oneToMany',
+      'oneToOne',
+      'api::activity.activity'
+    >;
+    BeingReviewdBy: Attribute.Relation<
+      'api::activity.activity',
+      'oneToOne',
       'api::activity.activity'
     >;
     usersToPair: Attribute.Integer &
       Attribute.Required &
-      Attribute.SetMinMax<{
-        min: 1;
-      }> &
       Attribute.DefaultTo<1>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1155,6 +1162,48 @@ export interface ApiNotificationNotification extends Schema.CollectionType {
   };
 }
 
+export interface ApiPeerReviewAnswerPeerReviewAnswer
+  extends Schema.CollectionType {
+  collectionName: 'peer_review_answers';
+  info: {
+    singularName: 'peer-review-answer';
+    pluralName: 'peer-review-answers';
+    displayName: 'PeerReviewAnswers';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    user: Attribute.Relation<
+      'api::peer-review-answer.peer-review-answer',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    qualification: Attribute.Relation<
+      'api::peer-review-answer.peer-review-answer',
+      'manyToOne',
+      'api::qualification.qualification'
+    >;
+    Answers: Attribute.JSON;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::peer-review-answer.peer-review-answer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::peer-review-answer.peer-review-answer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiQualificationQualification extends Schema.CollectionType {
   collectionName: 'qualifications';
   info: {
@@ -1192,7 +1241,11 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
       'oneToMany',
       'api::qualification.qualification'
     >;
-    PeerReviewAnswers: Attribute.JSON;
+    PeerReviewAnswers: Attribute.Relation<
+      'api::qualification.qualification',
+      'oneToMany',
+      'api::peer-review-answer.peer-review-answer'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1504,6 +1557,7 @@ declare module '@strapi/types' {
       'api::forum-tag.forum-tag': ApiForumTagForumTag;
       'api::log.log': ApiLogLog;
       'api::notification.notification': ApiNotificationNotification;
+      'api::peer-review-answer.peer-review-answer': ApiPeerReviewAnswerPeerReviewAnswer;
       'api::qualification.qualification': ApiQualificationQualification;
       'api::questionnaire.questionnaire': ApiQuestionnaireQuestionnaire;
       'api::section.section': ApiSectionSection;

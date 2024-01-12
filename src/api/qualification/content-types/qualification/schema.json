@@ -58,7 +58,10 @@
       "target": "api::qualification.qualification"
     },
     "PeerReviewAnswers": {
-      "type": "json"
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::peer-review-answer.peer-review-answer",
+      "mappedBy": "qualification"
     }
   }
 }

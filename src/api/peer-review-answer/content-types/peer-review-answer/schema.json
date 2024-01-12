@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "peer_review_answers",
+  "info": {
+    "singularName": "peer-review-answer",
+    "pluralName": "peer-review-answers",
+    "displayName": "PeerReviewAnswers",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "peer_review_answer"
+    },
+    "qualification": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::qualification.qualification",
+      "inversedBy": "PeerReviewAnswers"
+    },
+    "Answers": {
+      "type": "json"
+    }
+  }
+}
