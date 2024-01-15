@@ -683,7 +683,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     >;
     PeerReviewAnswers: Attribute.Relation<
       'plugin::users-permissions.user',
-      'oneToOne',
+      'oneToMany',
       'api::peer-review-answer.peer-review-answer'
     >;
     createdAt: Attribute.DateTime;
@@ -1183,7 +1183,7 @@ export interface ApiPeerReviewAnswerPeerReviewAnswer
     Answers: Attribute.JSON;
     user: Attribute.Relation<
       'api::peer-review-answer.peer-review-answer',
-      'oneToOne',
+      'manyToOne',
       'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
