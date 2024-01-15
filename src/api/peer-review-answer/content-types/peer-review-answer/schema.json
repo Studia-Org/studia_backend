@@ -11,12 +11,6 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "user": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "peer_review_answer"
-    },
     "qualification": {
       "type": "relation",
       "relation": "manyToOne",
@@ -25,6 +19,12 @@
     },
     "Answers": {
       "type": "json"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "PeerReviewAnswers"
     }
   }
 }

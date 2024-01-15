@@ -161,11 +161,11 @@
       "target": "api::subsection.subsection",
       "mappedBy": "users_who_completed"
     },
-    "peer_review_answer": {
+    "PeerReviewAnswers": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::peer-review-answer.peer-review-answer",
-      "mappedBy": "user"
+      "inversedBy": "user"
     }
   }
 }

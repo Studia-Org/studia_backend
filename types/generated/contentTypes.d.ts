@@ -681,7 +681,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToMany',
       'api::subsection.subsection'
     >;
-    peer_review_answer: Attribute.Relation<
+    PeerReviewAnswers: Attribute.Relation<
       'plugin::users-permissions.user',
       'oneToOne',
       'api::peer-review-answer.peer-review-answer'
@@ -1175,17 +1175,17 @@ export interface ApiPeerReviewAnswerPeerReviewAnswer
     draftAndPublish: true;
   };
   attributes: {
-    user: Attribute.Relation<
-      'api::peer-review-answer.peer-review-answer',
-      'oneToOne',
-      'plugin::users-permissions.user'
-    >;
     qualification: Attribute.Relation<
       'api::peer-review-answer.peer-review-answer',
       'manyToOne',
       'api::qualification.qualification'
     >;
     Answers: Attribute.JSON;
+    user: Attribute.Relation<
+      'api::peer-review-answer.peer-review-answer',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
