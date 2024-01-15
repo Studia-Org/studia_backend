@@ -769,7 +769,7 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       'oneToOne',
       'api::activity.activity'
     >;
-    BeingReviewdBy: Attribute.Relation<
+    BeingReviewedBy: Attribute.Relation<
       'api::activity.activity',
       'oneToOne',
       'api::activity.activity'

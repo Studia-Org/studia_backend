@@ -91,9 +91,9 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::activity.activity",
-      "inversedBy": "BeingReviewdBy"
+      "inversedBy": "BeingReviewedBy"
     },
-    "BeingReviewdBy": {
+    "BeingReviewedBy": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::activity.activity",
