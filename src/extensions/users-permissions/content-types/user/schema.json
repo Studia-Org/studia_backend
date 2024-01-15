@@ -163,9 +163,9 @@
     },
     "PeerReviewAnswers": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::peer-review-answer.peer-review-answer",
-      "inversedBy": "user"
+      "mappedBy": "user"
     }
   }
 }
