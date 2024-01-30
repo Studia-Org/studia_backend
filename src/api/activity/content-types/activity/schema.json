@@ -59,13 +59,12 @@
     "categories": {
       "type": "customField",
       "options": [
-        "Team Work",
-        "List Comprehension",
-        "Mark",
-        "Homework",
-        "Project",
-        "Exam",
-        "Quiz"
+        "Ethical commitment",
+        "Learning capability and responsibility",
+        "Teamwork",
+        "Creative and entrepreneurial capacity",
+        "Sustainability",
+        "Communicative ability"
       ],
       "customField": "plugin::multi-select.multi-select"
     },

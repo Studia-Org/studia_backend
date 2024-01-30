@@ -746,13 +746,12 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       Attribute.CustomField<
         'plugin::multi-select.multi-select',
         [
-          'Team Work',
-          'List Comprehension',
-          'Mark',
-          'Homework',
-          'Project',
-          'Exam',
-          'Quiz'
+          'Ethical commitment',
+          'Learning capability and responsibility',
+          'Teamwork',
+          'Creative and entrepreneurial capacity',
+          'Sustainability',
+          'Communicative ability'
         ]
       >;
     PeerReviewRubrica: Attribute.JSON;
@@ -1462,13 +1461,12 @@ export interface ApiUserObjectiveUserObjective extends Schema.CollectionType {
       Attribute.CustomField<
         'plugin::multi-select.multi-select',
         [
-          'Team Work',
-          'List Comprehension',
-          'Mark',
-          'Homework',
-          'Project',
-          'Exam',
-          'Quiz'
+          'Ethical commitment',
+          'Learning capability and responsibility',
+          'Teamwork',
+          'Creative and entrepreneurial capacity',
+          'Sustainability',
+          'Communicative ability'
         ]
       >;
     createdAt: Attribute.DateTime;
