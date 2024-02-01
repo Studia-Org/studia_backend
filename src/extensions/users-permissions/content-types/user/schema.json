@@ -166,6 +166,12 @@
       "relation": "oneToMany",
       "target": "api::peer-review-answer.peer-review-answer",
       "mappedBy": "user"
+    },
+    "groups": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::group.group",
+      "inversedBy": "users"
     }
   }
 }

@@ -686,6 +686,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'oneToMany',
       'api::peer-review-answer.peer-review-answer'
     >;
+    groups: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'manyToOne',
+      'api::group.group'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -776,6 +781,8 @@ export interface ApiActivityActivity extends Schema.CollectionType {
     usersToPair: Attribute.Integer &
       Attribute.Required &
       Attribute.DefaultTo<1>;
+    groupActivity: Attribute.Boolean & Attribute.DefaultTo<false>;
+    numberOfStudentsperGroup: Attribute.Integer;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1094,6 +1101,45 @@ export interface ApiForumTagForumTag extends Schema.CollectionType {
   };
 }
 
+export interface ApiGroupGroup extends Schema.CollectionType {
+  collectionName: 'groups';
+  info: {
+    singularName: 'group';
+    pluralName: 'groups';
+    displayName: 'Group';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    qualification: Attribute.Relation<
+      'api::group.group',
+      'manyToOne',
+      'api::qualification.qualification'
+    >;
+    users: Attribute.Relation<
+      'api::group.group',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::group.group',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::group.group',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiLogLog extends Schema.CollectionType {
   collectionName: 'logs';
   info: {
@@ -1244,6 +1290,11 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
       'api::qualification.qualification',
       'oneToMany',
       'api::peer-review-answer.peer-review-answer'
+    >;
+    groups: Attribute.Relation<
+      'api::qualification.qualification',
+      'oneToMany',
+      'api::group.group'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1553,6 +1604,7 @@ declare module '@strapi/types' {
       'api::forum-answer.forum-answer': ApiForumAnswerForumAnswer;
       'api::forum-post.forum-post': ApiForumPostForumPost;
       'api::forum-tag.forum-tag': ApiForumTagForumTag;
+      'api::group.group': ApiGroupGroup;
       'api::log.log': ApiLogLog;
       'api::notification.notification': ApiNotificationNotification;
       'api::peer-review-answer.peer-review-answer': ApiPeerReviewAnswerPeerReviewAnswer;

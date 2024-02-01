@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "groups",
+  "info": {
+    "singularName": "group",
+    "pluralName": "groups",
+    "displayName": "Group"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "qualification": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::qualification.qualification",
+      "inversedBy": "groups"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "groups"
+    }
+  }
+}

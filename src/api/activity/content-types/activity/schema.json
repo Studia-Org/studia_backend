@@ -102,6 +102,13 @@
       "type": "integer",
       "default": 1,
       "required": true
+    },
+    "groupActivity": {
+      "type": "boolean",
+      "default": false
+    },
+    "numberOfStudentsperGroup": {
+      "type": "integer"
     }
   }
 }

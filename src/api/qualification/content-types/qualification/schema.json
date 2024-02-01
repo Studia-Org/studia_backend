@@ -62,6 +62,12 @@
       "relation": "oneToMany",
       "target": "api::peer-review-answer.peer-review-answer",
       "mappedBy": "qualification"
+    },
+    "groups": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::group.group",
+      "mappedBy": "qualification"
     }
   }
 }
