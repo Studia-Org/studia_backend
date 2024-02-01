@@ -688,7 +688,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
     >;
     groups: Attribute.Relation<
       'plugin::users-permissions.user',
-      'manyToOne',
+      'manyToMany',
       'api::group.group'
     >;
     createdAt: Attribute.DateTime;
@@ -1118,7 +1118,7 @@ export interface ApiGroupGroup extends Schema.CollectionType {
     >;
     users: Attribute.Relation<
       'api::group.group',
-      'oneToMany',
+      'manyToMany',
       'plugin::users-permissions.user'
     >;
     activity: Attribute.Relation<

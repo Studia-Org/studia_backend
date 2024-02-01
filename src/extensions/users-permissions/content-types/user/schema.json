@@ -169,7 +169,7 @@
     },
     "groups": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::group.group",
       "inversedBy": "users"
     }
