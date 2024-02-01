@@ -1107,6 +1107,7 @@ export interface ApiGroupGroup extends Schema.CollectionType {
     singularName: 'group';
     pluralName: 'groups';
     displayName: 'Group';
+    description: '';
   };
   options: {
     draftAndPublish: true;
@@ -1121,6 +1122,11 @@ export interface ApiGroupGroup extends Schema.CollectionType {
       'api::group.group',
       'oneToMany',
       'plugin::users-permissions.user'
+    >;
+    activity: Attribute.Relation<
+      'api::group.group',
+      'oneToOne',
+      'api::activity.activity'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
