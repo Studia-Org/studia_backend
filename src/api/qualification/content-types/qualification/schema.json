@@ -63,11 +63,11 @@
       "target": "api::peer-review-answer.peer-review-answer",
       "mappedBy": "qualification"
     },
-    "groups": {
+    "group": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "api::group.group",
-      "mappedBy": "qualification"
+      "inversedBy": "qualification"
     }
   }
 }

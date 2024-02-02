@@ -1111,11 +1111,6 @@ export interface ApiGroupGroup extends Schema.CollectionType {
     draftAndPublish: true;
   };
   attributes: {
-    qualification: Attribute.Relation<
-      'api::group.group',
-      'manyToOne',
-      'api::qualification.qualification'
-    >;
     users: Attribute.Relation<
       'api::group.group',
       'manyToMany',
@@ -1125,6 +1120,11 @@ export interface ApiGroupGroup extends Schema.CollectionType {
       'api::group.group',
       'oneToOne',
       'api::activity.activity'
+    >;
+    qualification: Attribute.Relation<
+      'api::group.group',
+      'oneToOne',
+      'api::qualification.qualification'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1295,9 +1295,9 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
       'oneToMany',
       'api::peer-review-answer.peer-review-answer'
     >;
-    groups: Attribute.Relation<
+    group: Attribute.Relation<
       'api::qualification.qualification',
-      'oneToMany',
+      'oneToOne',
       'api::group.group'
     >;
     createdAt: Attribute.DateTime;

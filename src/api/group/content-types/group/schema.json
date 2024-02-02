@@ -11,12 +11,6 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "qualification": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::qualification.qualification",
-      "inversedBy": "groups"
-    },
     "users": {
       "type": "relation",
       "relation": "manyToMany",
@@ -27,6 +21,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::activity.activity"
+    },
+    "qualification": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::qualification.qualification",
+      "mappedBy": "group"
     }
   }
 }
