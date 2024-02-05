@@ -1224,9 +1224,9 @@ export interface ApiPeerReviewAnswerPeerReviewAnswer
     draftAndPublish: true;
   };
   attributes: {
-    qualification: Attribute.Relation<
+    qualifications: Attribute.Relation<
       'api::peer-review-answer.peer-review-answer',
-      'manyToOne',
+      'manyToMany',
       'api::qualification.qualification'
     >;
     Answers: Attribute.JSON;
@@ -1290,15 +1290,15 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
       'oneToMany',
       'api::qualification.qualification'
     >;
-    PeerReviewAnswers: Attribute.Relation<
-      'api::qualification.qualification',
-      'oneToMany',
-      'api::peer-review-answer.peer-review-answer'
-    >;
     group: Attribute.Relation<
       'api::qualification.qualification',
       'oneToOne',
       'api::group.group'
+    >;
+    PeerReviewAnswers: Attribute.Relation<
+      'api::qualification.qualification',
+      'manyToMany',
+      'api::peer-review-answer.peer-review-answer'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

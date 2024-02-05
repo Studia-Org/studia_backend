@@ -26,7 +26,42 @@ function hacerParejas(objeto, usersToPair = 1) {
         parejas.push(pareja);
     }
 
-    return { parejas };
+    return { grupos: parejas };
+}
+
+function hacerParejasGrupos(grupos, usersToPair = 1) {
+    const longitud = grupos.length;
+    while (true) {
+        if (longitud < 2 || usersToPair < 1 || usersToPair >= longitud) {
+            if (usersToPair < 1) usersToPair = 1;
+            if (usersToPair >= longitud) usersToPair = longitud - 1;
+            if (longitud < 2) throw new Error('Cannot pair less than 2 groups');
+        }
+        else break;
+    }
+
+    const parejas = [];
+    for (let i = 0; i < longitud; i++) {
+        const pareja = [];
+        const pareja2 = [];
+        pareja.push(grupos[i].users[0].id);
+        pareja2.push(grupos[i].users[1].id);
+        for (let j = 1; j <= usersToPair; j++) {
+            const indexGrupoACorregir = (i + j) % longitud;
+            // no se puede corregir a uno mismo
+            if (indexGrupoACorregir !== i) {
+                const grupoACorregir = grupos[indexGrupoACorregir];
+                pareja.push(grupoACorregir);
+                pareja2.push(grupoACorregir);
+            }
+        }
+
+        parejas.push(pareja);
+        parejas.push(pareja2);
+    }
+
+    return { grupos: parejas };
+
 }
 
 async function obtenerUsuariosDeCurso(idCourse) {
@@ -63,35 +98,57 @@ module.exports = async function crearActividadVinculandoUsuarios(ctx) {
 
         if (idActivityPeerReview === undefined) throw new Error('idActivityPeerReview cannot be undefined')
 
-        const { qualifications } = await strapi.entityService.
+        const { qualifications, groupActivity } = await strapi.entityService.
             findOne('api::activity.activity',
                 idMainActivity, {
                 populate: {
                     qualifications: {
                         populate: {
-                            user: true
+                            user: true,
+                            group: {
+                                populate: {
+                                    users: true
+                                }
+
+                            }
                         }
                     }
                 }
             });
-        // usuarios que ha entregado la actividad
-        const usuariosQueHanHechoLaActividad = qualifications.map(qualification => qualification.user);
-        // usuarios que no han entregado la actividad
-        const usuariosQueNoHanHechoLaActividad =
-            usuariosDelCurso.
-                filter(usuario => usuariosQueHanHechoLaActividad.
-                    every(usuarioQueHaHechoLaActividad => usuarioQueHaHechoLaActividad.id !== usuario.id));
 
-        const { parejas } = hacerParejas(usuariosQueHanHechoLaActividad, usersToPair);
+        console.log(groupActivity);
+        let parejas;
+
+        // usuarios que ha entregado la actividad
+        if (groupActivity) {
+            const gruposQueHanHechoLaActividad = qualifications.map(qualification => qualification.group);
+            const { grupos } = hacerParejasGrupos(gruposQueHanHechoLaActividad, usersToPair);
+            parejas = grupos
+        }
+        else {
+            const usuariosQueHanHechoLaActividad = qualifications.map(qualification => qualification.user);
+            const { grupos } = hacerParejas(usuariosQueHanHechoLaActividad, usersToPair);
+            parejas = grupos
+        }
 
         for (const pareja of parejas) {
             // find qualifications of all users
             const user = pareja[0];
             const parejaSinUser = pareja.filter(user => user.id !== pareja[0].id);
+            let peerReviewqualifications;
 
-            const peerReviewqualifications = qualifications.
-                filter(qualification => parejaSinUser.
-                    some(user => user.id === qualification.user.id)).map(qualification => qualification.id);
+            if (groupActivity) {
+                peerReviewqualifications = qualifications.
+                    filter(qualification => parejaSinUser.
+                        some(group => group.id === qualification.group.id)).map(qualification => qualification.id);
+                console.log(peerReviewqualifications);
+
+            }
+            else {
+                peerReviewqualifications = qualifications.
+                    filter(qualification => parejaSinUser.
+                        some(user => user.id === qualification.user.id)).map(qualification => qualification.id);
+            }
             const qualification = await strapi.entityService.create('api::qualification.qualification', {
                 data: {
                     activity: idActivityPeerReview,

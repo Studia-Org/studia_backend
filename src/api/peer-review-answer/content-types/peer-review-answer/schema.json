@@ -11,9 +11,9 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "qualification": {
+    "qualifications": {
       "type": "relation",
-      "relation": "manyToOne",
+      "relation": "manyToMany",
       "target": "api::qualification.qualification",
       "inversedBy": "PeerReviewAnswers"
     },
