@@ -1,4 +1,4 @@
-function hacerParejas(objeto, usersToPair = 1) {
+function hacerParejasPeerReview(objeto, usersToPair = 1) {
     const elementos = [...Object.values(objeto)];
     const longitud = elementos.length;
     while (true) {
@@ -78,7 +78,52 @@ async function obtenerUsuariosDeCurso(idCourse) {
     return { curso, usuariosDelCurso: students };
 }
 
-module.exports = async function crearActividadVinculandoUsuarios(ctx) {
+async function hacerGrupos(students, usersToPair = 2) {
+    const longitud = students.length;
+    while (true) {
+        if (longitud < 2 || usersToPair < 2 || usersToPair >= longitud) {
+            if (usersToPair < 2) usersToPair = 2;
+            if (usersToPair >= longitud) usersToPair = longitud - 1;
+            if (longitud < 2) throw new Error('Cannot pair less than 2 users');
+        } else {
+            break;
+        }
+    }
+
+    const parejas = [];
+    const numGrupos = Math.ceil(longitud / usersToPair);
+
+    for (let i = 0; i < numGrupos; i++) {
+        const pareja = [];
+        for (let j = 0; j < usersToPair; j++) {
+            const indexUsuario = i * usersToPair + j;
+            if (indexUsuario < longitud) {
+                const usuario = students[indexUsuario];
+                pareja.push(usuario);
+            }
+        }
+
+        parejas.push(pareja);
+    }
+
+    if (parejas[parejas.length - 1].length <= usersToPair / 2) {
+        const ultimoGrupo = parejas.pop();
+        let itr = 0
+        for (const usuario of ultimoGrupo) {
+            const index = (parejas.length - 1 - itr) % parejas.length;
+            console.log({ index });
+            console.log({ usuario });
+            parejas[index].push(usuario);
+            itr++;
+
+        }
+    }
+
+    return { grupos: parejas };
+}
+
+
+async function crearActividadVinculandoUsuarios(ctx) {
     try {
 
         let { idCourse, idMainActivity, idActivityPeerReview, evaluator, startDate, usersToPair = 1 } = ctx.request.body;
@@ -127,7 +172,7 @@ module.exports = async function crearActividadVinculandoUsuarios(ctx) {
         }
         else {
             const usuariosQueHanHechoLaActividad = qualifications.map(qualification => qualification.user);
-            const { grupos } = hacerParejas(usuariosQueHanHechoLaActividad, usersToPair);
+            const { grupos } = hacerParejasPeerReview(usuariosQueHanHechoLaActividad, usersToPair);
             parejas = grupos
         }
 
@@ -169,3 +214,11 @@ module.exports = async function crearActividadVinculandoUsuarios(ctx) {
 
     }
 }
+
+module.exports = {
+    hacerGrupos,
+    hacerParejasGrupos,
+    obtenerUsuariosDeCurso,
+    crearActividadVinculandoUsuarios
+
+} 
