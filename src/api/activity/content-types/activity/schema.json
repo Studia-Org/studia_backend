@@ -83,7 +83,8 @@
         "peerReview",
         "task",
         "forum",
-        "questionnaire"
+        "questionnaire",
+        "thinkAloud"
       ]
     },
     "task_to_review": {

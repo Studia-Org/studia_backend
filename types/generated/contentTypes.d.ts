@@ -766,7 +766,7 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       'api::section.section'
     >;
     type: Attribute.Enumeration<
-      ['peerReview', 'task', 'forum', 'questionnaire']
+      ['peerReview', 'task', 'forum', 'questionnaire', 'thinkAloud']
     >;
     task_to_review: Attribute.Relation<
       'api::activity.activity',
