@@ -1,4 +1,5 @@
 const { crearActividadVinculandoUsuarios, hacerGrupos } = require('../config/functionsPeerReview/helpers');
+const { deleteGroups } = require('../src/api/group/helpers/helpers');
 
 
 module.exports = {
@@ -100,7 +101,7 @@ module.exports = {
     },
     '*/1 * * * *': {
         task: async ({ strapi }) => {
-
+            console.log("Running cron job to create groups");
             const activitiesToMakeGroups = await strapi.entityService.findMany('api::activity.activity', {
                 filters: {
                     groupActivity: true,
@@ -112,7 +113,7 @@ module.exports = {
                     }
                 }
             });
-
+            console.log("Activities to make groups: ", activitiesToMakeGroups.length);
 
             const groups = await strapi.entityService.findMany('api::group.group', {
                 filters: {
@@ -190,9 +191,9 @@ module.exports = {
                         console.log("All students has group: " + subsection.activity.id, allStudentsHasGroup);
                         if (allStudentsHasGroup) return;
                         //delete all groups from this activity
-                        await strapi.entityService.deleteMany('api::group.group', {
-                            activity: subsection.activity.id
-                        });
+
+                        await deleteGroups({ strapi, activityId: subsection.activity.id });
+
                         console.log("Creating groups for activity: ", subsection.activity.id);
                         const { grupos } = await hacerGrupos(students, longitudGrupo);
 
@@ -205,6 +206,7 @@ module.exports = {
                                 },
                             });
                         }
+
                     });
 
                 };
