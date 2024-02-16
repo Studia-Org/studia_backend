@@ -110,6 +110,9 @@
     },
     "numberOfStudentsperGroup": {
       "type": "integer"
+    },
+    "start_date": {
+      "type": "datetime"
     }
   }
 }

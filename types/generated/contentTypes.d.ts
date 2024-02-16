@@ -781,6 +781,7 @@ export interface ApiActivityActivity extends Schema.CollectionType {
     usersToPair: Attribute.Integer & Attribute.DefaultTo<1>;
     groupActivity: Attribute.Boolean & Attribute.DefaultTo<false>;
     numberOfStudentsperGroup: Attribute.Integer;
+    start_date: Attribute.DateTime;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
