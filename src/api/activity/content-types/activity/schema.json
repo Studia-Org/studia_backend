@@ -113,6 +113,12 @@
     },
     "start_date": {
       "type": "datetime"
+    },
+    "subsection": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::subsection.subsection",
+      "inversedBy": "activity"
     }
   }
 }

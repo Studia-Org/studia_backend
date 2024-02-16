@@ -35,7 +35,8 @@
     "activity": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::activity.activity"
+      "target": "api::activity.activity",
+      "inversedBy": "subsection"
     },
     "description": {
       "type": "string",
