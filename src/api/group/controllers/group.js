@@ -30,7 +30,8 @@ module.exports = createCoreController('api::group.group',
                         },
                     });
                 });
-                return ctx.created({ result: 'Groups created' });
+                ctx.response.status = 200;
+                return ctx
             }
             catch (err) {
                 await deleteGroups({ strapi, activityId });
