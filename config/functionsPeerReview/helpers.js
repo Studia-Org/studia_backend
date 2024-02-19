@@ -40,24 +40,30 @@ function hacerParejasGrupos(grupos, usersToPair = 1) {
         else break;
     }
 
-    const parejas = [];
+    let parejas = [];
+
     for (let i = 0; i < longitud; i++) {
-        const pareja = [];
-        const pareja2 = [];
-        pareja.push(grupos[i].users[0].id);
-        pareja2.push(grupos[i].users[1].id);
+
+        const parejasPorGrupo = []
+        grupos[i].users.forEach(user => {
+            parejasPorGrupo.push([user.id]);
+        });
+
         for (let j = 1; j <= usersToPair; j++) {
             const indexGrupoACorregir = (i + j) % longitud;
             // no se puede corregir a uno mismo
             if (indexGrupoACorregir !== i) {
                 const grupoACorregir = grupos[indexGrupoACorregir];
-                pareja.push(grupoACorregir);
-                pareja2.push(grupoACorregir);
+
+                parejasPorGrupo.forEach((user, index) => {
+                    parejasPorGrupo[index] = parejasPorGrupo[index].concat(grupoACorregir)
+                })
+
+
             }
         }
 
-        parejas.push(pareja);
-        parejas.push(pareja2);
+        parejas = parejas.concat(parejasPorGrupo);
     }
 
     return { grupos: parejas };
@@ -161,7 +167,6 @@ async function crearActividadVinculandoUsuarios(ctx) {
                 }
             });
 
-        console.log(groupActivity);
         let parejas;
 
         // usuarios que ha entregado la actividad
@@ -186,7 +191,6 @@ async function crearActividadVinculandoUsuarios(ctx) {
                 peerReviewqualifications = qualifications.
                     filter(qualification => parejaSinUser.
                         some(group => group.id === qualification.group.id)).map(qualification => qualification.id);
-                console.log(peerReviewqualifications);
 
             }
             else {

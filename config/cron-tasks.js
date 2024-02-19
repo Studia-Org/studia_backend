@@ -13,7 +13,7 @@ module.exports = {
                             populate: {
                                 activity: {
                                     populate: {
-                                        taskToReview: true,
+                                        task_to_review: true,
                                         qualifications: true,
                                     }
                                 },
@@ -26,6 +26,9 @@ module.exports = {
                             filters: {
                                 activity: {
                                     type: 'peerReview',
+                                    start_date: {
+                                        $lte: new Date()
+                                    },
                                     deadline: {
                                         $gte: new Date()
                                     },
@@ -40,18 +43,19 @@ module.exports = {
                     )
                 console.log("#############################################################################################################");
                 console.log(new Date());
-                console.log("Activities: ", subsections.length);
+                console.log("Activities peer review: ", subsections.length);
 
                 subsections = subsections.filter(subsection => subsection.activity.qualifications.length === 0);
 
                 console.log("Activities after filtering the ones who has alreay created qualifications: ", subsections.length);
 
                 subsections = subsections.map(subsection => {
+                    console.log("Subsection: ", subsection);
                     try {
 
                         return {
                             idCourse: subsection?.section?.course?.id,
-                            idMainActivity: subsection?.activity?.taskToReview?.id,
+                            idMainActivity: subsection?.activity?.task_to_review?.id,
                             idActivityPeerReview: subsection?.activity?.id,
                             startDate: new Date(subsection?.start_date),
                             usersToPair: subsection?.activity?.usersToPair,
@@ -68,7 +72,7 @@ module.exports = {
                     async subsection => {
                         try {
                             // call to create activity
-                            console.log("Creating activity for subsection: ", subsection);
+                            console.log("Creating activity for subsection: ", subsection.id);
                             // @ts-ignore
                             const { parejas, error } = await crearActividadVinculandoUsuarios({ request: { body: subsection } });
                             if (error) throw new Error(error);
@@ -95,7 +99,8 @@ module.exports = {
 
         },
         options: {
-            rule: '0 0 0 * * *', // cada dia a las 00:00:00
+            // rule: '0 0 0 * * *', // cada dia a las 00:00:00
+            rule: '*/1 * * * *', // cada minuto
             tz: 'Europe/Madrid'
         }
     },
