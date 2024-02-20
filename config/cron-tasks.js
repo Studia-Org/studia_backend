@@ -211,7 +211,7 @@ module.exports = {
                                 },
                             });
                         }
-
+                        console.log("Created groups for activity: ", subsection.activity.id);
                     });
 
                 };

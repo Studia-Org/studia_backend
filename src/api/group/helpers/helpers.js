@@ -1,4 +1,7 @@
 async function deleteGroups({ strapi, activityId }) {
+    if (!activityId) {
+        throw new Error("Activity id is required");
+    }
     const allGroups = await strapi.db.query("api::group.group").findMany({
         where: {
             activity: {
