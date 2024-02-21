@@ -50,7 +50,7 @@ module.exports = {
                 console.log("Activities after filtering the ones who has alreay created qualifications: ", subsections.length);
 
                 subsections = subsections.map(subsection => {
-                    console.log("Subsection: ", subsection);
+                    console.log("Subsection: ", subsection.id);
                     try {
 
                         return {
