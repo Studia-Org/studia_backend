@@ -12,8 +12,31 @@ module.exports = {
         if (qualification) {
             throw new Error("Qualification already exists for the group and activity");;
         }
-
+        const activityData = await strapi.db.query('api::activity.activity').findOne({
+            where: {
+                id: activity
+            }
+        });
+        if (activityData.deadline) {
+            if (new Date(activityData.deadline) < new Date()) {
+                throw new Error("Activity deadline has passed");
+            }
+        }
 
     },
+    async beforeUpdate(event) {
+        const { group, activity, file } = event.params.data;
+        const activityData = await strapi.db.query('api::activity.activity').findOne({
+            where: {
+                id: activity
+            }
+        });
+
+        if (activityData.deadline) {
+            if (new Date(activityData.deadline) < new Date()) {
+                throw new Error("Activity deadline has passed");
+            }
+        }
+    }
 
 }

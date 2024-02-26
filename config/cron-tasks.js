@@ -42,7 +42,7 @@ module.exports = {
                         }
                     )
                 console.log("#############################################################################################################");
-                console.log(new Date());
+                console.log(new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString());
                 console.log("Activities peer review: ", subsections.length);
 
                 subsections = subsections.filter(subsection => subsection.activity.qualifications.length === 0);
@@ -72,7 +72,7 @@ module.exports = {
                     async subsection => {
                         try {
                             // call to create activity
-                            console.log("Creating activity for subsection: ", subsection.id);
+                            console.log("Creating peer reviews for activity: ", subsection.idMainActivity);
                             // @ts-ignore
                             const { parejas, error } = await crearActividadVinculandoUsuarios({ request: { body: subsection } });
                             if (error) throw new Error(error);
@@ -81,8 +81,6 @@ module.exports = {
                         }
                         catch (err) {
                             console.error(err.message);
-                            console.log("#############################################################################################################");
-
                         }
                     })
                 console.log("#############################################################################################################");
