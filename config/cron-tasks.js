@@ -1,8 +1,85 @@
 const { crearActividadVinculandoUsuarios, hacerGrupos } = require('../config/functionsPeerReview/helpers');
 const { deleteGroups } = require('../src/api/group/helpers/helpers');
+const subsection = require('../src/api/subsection/controllers/subsection');
 
 
 module.exports = {
+    nuevaCronTask: {
+        task: async ({ strapi }) => {
+            try {
+                const today = new Date();
+                let subsections =
+                    await strapi.entityService.findMany('api::subsection.subsection',
+                        {
+                            populate: {
+                                activity: true,
+                                section: {
+                                    populate: {
+                                        course: {
+                                            populate: {
+                                                students: {
+                                                    populate: {
+                                                        subsections_completed: true
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            },
+                            filters: {
+                                end_date: {
+                                    $lt: today
+                                },
+                                activity: {
+                                    evaluable: false
+                                },
+                                section: {
+                                    course: {
+                                        start_date: {
+                                            $lte: today
+                                        },
+                                        end_date: {
+                                            $gte: today
+                                        }
+                                    }
+                                },
+                            }
+                        }
+                    )
+
+                subsections.forEach(async subsection => {
+                    const students = subsection.section.course.students;
+                    try {
+                        students.forEach(async student => {
+                            const subsectionsCompleted = student.subsections_completed;
+                            const alreadyCompleted = subsectionsCompleted.some(subsectionCompleted => subsectionCompleted.id === subsection.id);
+                            if (!alreadyCompleted) {
+                                await strapi.entityService.update('plugin::users-permissions.user', student.id, {
+                                    data: {
+                                        subsections_completed: {
+                                            connect: [subsection.id]
+                                        }
+                                    }
+                                });
+
+                            }
+                        })
+                    } catch (error) {
+                        console.error("Error en la nueva tarea cron:", error);
+                    }
+                })
+
+            } catch (error) {
+                console.error("Error en la nueva tarea cron:", error);
+            }
+        },
+        options: {
+            // cada diez minutos
+            rule: '*/10 * * * *',
+            tz: 'Europe/Madrid'
+        }
+    },
     postPeerReview: {
         task: async ({ strapi }) => {
             try {
@@ -41,12 +118,8 @@ module.exports = {
                             }
                         }
                     )
-                console.log("#############################################################################################################");
-                console.log(new Date());
-                console.log("Activities peer review: ", subsections.length);
 
                 subsections = subsections.filter(subsection => subsection.activity.qualifications.length === 0);
-
                 console.log("Activities after filtering the ones who has alreay created qualifications: ", subsections.length);
 
                 subsections = subsections.map(subsection => {
@@ -72,12 +145,9 @@ module.exports = {
                     async subsection => {
                         try {
                             // call to create activity
-                            console.log("Creating activity for subsection: ", subsection.id);
                             // @ts-ignore
                             const { parejas, error } = await crearActividadVinculandoUsuarios({ request: { body: subsection } });
                             if (error) throw new Error(error);
-                            console.log(`Activity created with : ${parejas.length} pairs}`);
-
                         }
                         catch (err) {
                             console.error(err.message);
@@ -223,5 +293,6 @@ module.exports = {
         options: {
             tz: 'Europe/Madrid'
         }
-    }
+    },
+
 }
