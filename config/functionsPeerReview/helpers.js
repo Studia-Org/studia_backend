@@ -1,6 +1,6 @@
-function hacerParejasPeerReview(objeto, usersToPair = 1) {
-    const elementos = [...Object.values(objeto)];
-    const longitud = elementos.length;
+function hacerParejasPeerReview(usuariosQueHanHechoLaActividad, usersToPair = 1) {
+    const copiaUsuarios = [...Object.values(usuariosQueHanHechoLaActividad)];
+    const longitud = copiaUsuarios.length;
     while (true) {
         if (longitud < 2 || usersToPair < 1 || usersToPair >= longitud) {
             if (usersToPair < 1) usersToPair = 1;
@@ -13,12 +13,12 @@ function hacerParejasPeerReview(objeto, usersToPair = 1) {
     const parejas = [];
     for (let i = 0; i < longitud; i++) {
         const pareja = [];
-        pareja.push(elementos[i]);
+        pareja.push(copiaUsuarios[i]);
         for (let j = 1; j <= usersToPair; j++) {
             const indexUsuarioACorregir = (i + j) % longitud;
             // no se puede corregir a uno mismo
             if (indexUsuarioACorregir !== i) {
-                const usuarioACorregir = elementos[indexUsuarioACorregir];
+                const usuarioACorregir = copiaUsuarios[indexUsuarioACorregir];
                 pareja.push(usuarioACorregir);
             }
         }
