@@ -18,7 +18,7 @@ module.exports = {
                 throw new Error("Qualification already exists for the group and activity");;
             }
         }
-        console.log("user", user)
+        console.log("before create qualification user", user)
         if (user !== undefined) {
             const userQualification = await strapi.db.query('api::qualification.qualification').findOne({
                 where: {

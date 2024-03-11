@@ -1127,9 +1127,9 @@ export interface ApiGroupGroup extends Schema.CollectionType {
       'oneToOne',
       'api::activity.activity'
     >;
-    qualification: Attribute.Relation<
+    qualifications: Attribute.Relation<
       'api::group.group',
-      'oneToOne',
+      'oneToMany',
       'api::qualification.qualification'
     >;
     createdAt: Attribute.DateTime;
@@ -1298,7 +1298,7 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
     >;
     group: Attribute.Relation<
       'api::qualification.qualification',
-      'oneToOne',
+      'manyToOne',
       'api::group.group'
     >;
     PeerReviewAnswers: Attribute.Relation<

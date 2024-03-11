@@ -22,9 +22,9 @@
       "relation": "oneToOne",
       "target": "api::activity.activity"
     },
-    "qualification": {
+    "qualifications": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "api::qualification.qualification",
       "mappedBy": "group"
     }

@@ -129,6 +129,7 @@ module.exports = {
                         return {
                             idCourse: subsection?.section?.course?.id,
                             idMainActivity: subsection?.activity?.task_to_review?.id,
+                            reviewInGroups: subsection?.activity?.groupActivity,
                             idActivityPeerReview: subsection?.activity?.id,
                             startDate: new Date(subsection?.start_date),
                             usersToPair: subsection?.activity?.usersToPair,
@@ -163,6 +164,9 @@ module.exports = {
                 console.log("#############################################################################################################");
 
             }
+            finally {
+                console.log("Done creating peer review activities")
+            }
 
 
         },
@@ -178,6 +182,9 @@ module.exports = {
             const activitiesToMakeGroups = await strapi.entityService.findMany('api::activity.activity', {
                 filters: {
                     groupActivity: true,
+                    $not: {
+                        type: 'peerReview'
+                    },
                     start_date: {
                         $lte: new Date()
                     },
