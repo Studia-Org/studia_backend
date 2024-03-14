@@ -1132,6 +1132,11 @@ export interface ApiGroupGroup extends Schema.CollectionType {
       'oneToMany',
       'api::qualification.qualification'
     >;
+    PeerReviewAnswers: Attribute.Relation<
+      'api::group.group',
+      'oneToMany',
+      'api::peer-review-answer.peer-review-answer'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1240,6 +1245,11 @@ export interface ApiPeerReviewAnswerPeerReviewAnswer
       'api::peer-review-answer.peer-review-answer',
       'manyToOne',
       'plugin::users-permissions.user'
+    >;
+    group: Attribute.Relation<
+      'api::peer-review-answer.peer-review-answer',
+      'manyToOne',
+      'api::group.group'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
