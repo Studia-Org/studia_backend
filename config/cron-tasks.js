@@ -258,7 +258,6 @@ module.exports = {
                 return acc;
             }, {});
             try {
-
                 for (const key in activitiesPerCourse) {
                     const course = activitiesPerCourse[key];
                     course.forEach(async subsection => {
@@ -280,19 +279,26 @@ module.exports = {
                         await deleteGroups({ strapi, activityId: subsection.activity.id });
 
                         console.log("Creating groups for activity: ", subsection.activity.id);
-                        const { grupos } = await hacerGrupos(students, longitudGrupo);
+                        try {
 
-                        for (const pareja of grupos) {
-                            const group = await strapi.entityService.create('api::group.group', {
-                                data: {
-                                    activity: subsection.activity.id,
-                                    users: pareja.map(user => user.id),
-                                    publishedAt: new Date(),
-                                },
-                            });
+                            const { grupos } = await hacerGrupos(students, longitudGrupo);
+
+                            for (const pareja of grupos) {
+                                const group = await strapi.entityService.create('api::group.group', {
+                                    data: {
+                                        activity: subsection.activity.id,
+                                        users: pareja.map(user => user.id),
+                                        publishedAt: new Date(),
+                                    },
+                                });
+                            }
+                            console.log("Created groups for activity: ", subsection.activity.id);
                         }
-                        console.log("Created groups for activity: ", subsection.activity.id);
+                        catch (err) {
+                            console.log('\x1b[31m%s\x1b[0m', err);
+                        }
                     });
+
 
                 };
             }
