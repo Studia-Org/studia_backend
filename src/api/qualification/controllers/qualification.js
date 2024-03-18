@@ -11,7 +11,7 @@ module.exports = createCoreController('api::qualification.qualification',
         async createPeers(ctx) {
             // @ts-ignore
 
-            const { peers } = ctx.request.body;
+            const { peers, peerInGroups } = ctx.request.body;
             if (!peers) {
                 return ctx.badRequest({ result: 'Peers are required' });
             }
@@ -37,18 +37,31 @@ module.exports = createCoreController('api::qualification.qualification',
 
                 peers.forEach(async (peer) => {
                     try {
-                        peer.users.forEach(async (user) => {
-
-                            const create_peer = await strapi.db.query("api::qualification.qualification").create({
-                                data: {
-                                    user: [user],
-                                    activity: peer.activity,
-                                    peer_review_qualifications: peer.qualifications,
-                                    publishedAt: new Date(),
-                                },
+                        if (peerInGroups) {
+                            peer.groups.forEach(async (group) => {
+                                const create_peer = await strapi.db.query("api::qualification.qualification").create({
+                                    data: {
+                                        group: [group],
+                                        activity: peer.activity,
+                                        peer_review_qualifications: peer.qualifications,
+                                        publishedAt: new Date(),
+                                    },
+                                });
                             });
-                        });
+                        }
+                        else {
+                            peer.users.forEach(async (user) => {
 
+                                const create_peer = await strapi.db.query("api::qualification.qualification").create({
+                                    data: {
+                                        user: [user],
+                                        activity: peer.activity,
+                                        peer_review_qualifications: peer.qualifications,
+                                        publishedAt: new Date(),
+                                    },
+                                });
+                            });
+                        }
 
                     } catch (err) {
                         console.log(err)
