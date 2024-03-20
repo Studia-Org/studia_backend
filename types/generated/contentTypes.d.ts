@@ -900,6 +900,7 @@ export interface ApiCourseCourse extends Schema.CollectionType {
       'oneToMany',
       'plugin::users-permissions.user'
     >;
+    studentManaged: Attribute.Boolean;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
