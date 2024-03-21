@@ -119,6 +119,10 @@
       "relation": "oneToOne",
       "target": "api::subsection.subsection",
       "inversedBy": "activity"
+    },
+    "ponderationStudent": {
+      "type": "integer",
+      "max": 100
     }
   }
 }

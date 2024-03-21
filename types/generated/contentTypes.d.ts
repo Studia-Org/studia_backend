@@ -787,6 +787,10 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       'oneToOne',
       'api::subsection.subsection'
     >;
+    ponderationStudent: Attribute.Integer &
+      Attribute.SetMinMax<{
+        max: 100;
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

@@ -36,7 +36,7 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::activity.activity",
-      "inversedBy": "subsection"
+      "mappedBy": "subsection"
     },
     "description": {
       "type": "string",
