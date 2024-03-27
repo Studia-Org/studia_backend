@@ -787,6 +787,10 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       'oneToOne',
       'api::subsection.subsection'
     >;
+    ponderationStudent: Attribute.Integer &
+      Attribute.SetMinMax<{
+        max: 100;
+      }>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -900,6 +904,7 @@ export interface ApiCourseCourse extends Schema.CollectionType {
       'oneToMany',
       'plugin::users-permissions.user'
     >;
+    studentManaged: Attribute.Boolean;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1127,10 +1132,15 @@ export interface ApiGroupGroup extends Schema.CollectionType {
       'oneToOne',
       'api::activity.activity'
     >;
-    qualification: Attribute.Relation<
+    qualifications: Attribute.Relation<
       'api::group.group',
-      'oneToOne',
+      'oneToMany',
       'api::qualification.qualification'
+    >;
+    PeerReviewAnswers: Attribute.Relation<
+      'api::group.group',
+      'oneToMany',
+      'api::peer-review-answer.peer-review-answer'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -1241,6 +1251,11 @@ export interface ApiPeerReviewAnswerPeerReviewAnswer
       'manyToOne',
       'plugin::users-permissions.user'
     >;
+    group: Attribute.Relation<
+      'api::peer-review-answer.peer-review-answer',
+      'manyToOne',
+      'api::group.group'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1298,7 +1313,7 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
     >;
     group: Attribute.Relation<
       'api::qualification.qualification',
-      'oneToOne',
+      'manyToOne',
       'api::group.group'
     >;
     PeerReviewAnswers: Attribute.Relation<

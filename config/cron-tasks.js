@@ -7,7 +7,9 @@ module.exports = {
     nuevaCronTask: {
         task: async ({ strapi }) => {
             try {
+
                 const today = new Date();
+                console.log("Today: ", today);
                 let subsections =
                     await strapi.entityService.findMany('api::subsection.subsection',
                         {
@@ -29,11 +31,11 @@ module.exports = {
                             },
                             filters: {
                                 end_date: {
-                                    $lt: today
+                                    $lte: today
                                 },
-                                activity: {
-                                    evaluable: false
-                                },
+                                // activity: {
+                                //     evaluable: false
+                                // },
                                 section: {
                                     course: {
                                         start_date: {
@@ -47,12 +49,14 @@ module.exports = {
                             }
                         }
                     )
-
+                console.log("Subsections to update: ", subsections.length);
                 subsections.forEach(async subsection => {
+                    console.log("Subsection: ", subsection.id);
                     const students = subsection.section.course.students;
                     try {
                         students.forEach(async student => {
                             const subsectionsCompleted = student.subsections_completed;
+                            console.log("Subsections completed: ", subsectionsCompleted.map(subsection => subsection.id));
                             const alreadyCompleted = subsectionsCompleted.some(subsectionCompleted => subsectionCompleted.id === subsection.id);
                             if (!alreadyCompleted) {
                                 await strapi.entityService.update('plugin::users-permissions.user', student.id, {
@@ -69,21 +73,21 @@ module.exports = {
                         console.error("Error en la nueva tarea cron:", error);
                     }
                 })
-
+                console.log("Done updating subsections")
             } catch (error) {
                 console.error("Error en la nueva tarea cron:", error);
             }
         },
         options: {
             // cada diez minutos
-            rule: '*/10 * * * *',
+            rule: '*/1 * * * *',
             tz: 'Europe/Madrid'
         }
     },
     postPeerReview: {
         task: async ({ strapi }) => {
             try {
-
+                const today = new Date();
                 let subsections =
                     await strapi.entityService.findMany('api::subsection.subsection',
                         {
@@ -104,14 +108,14 @@ module.exports = {
                                 activity: {
                                     type: 'peerReview',
                                     start_date: {
-                                        $lte: new Date()
+                                        $lte: today
                                     },
                                     deadline: {
-                                        $gte: new Date()
+                                        $gte: today
                                     },
                                 },
                                 start_date: {
-                                    $lte: new Date()
+                                    $lte: today
                                 },
 
 
@@ -129,6 +133,7 @@ module.exports = {
                         return {
                             idCourse: subsection?.section?.course?.id,
                             idMainActivity: subsection?.activity?.task_to_review?.id,
+                            reviewInGroups: subsection?.activity?.groupActivity,
                             idActivityPeerReview: subsection?.activity?.id,
                             startDate: new Date(subsection?.start_date),
                             usersToPair: subsection?.activity?.usersToPair,
@@ -163,6 +168,9 @@ module.exports = {
                 console.log("#############################################################################################################");
 
             }
+            finally {
+                console.log("Done creating peer review activities")
+            }
 
 
         },
@@ -174,15 +182,19 @@ module.exports = {
     },
     '*/1 * * * *': {
         task: async ({ strapi }) => {
+            const today = new Date();
             console.log("Running cron job to create groups");
             const activitiesToMakeGroups = await strapi.entityService.findMany('api::activity.activity', {
                 filters: {
                     groupActivity: true,
+                    $not: {
+                        type: 'peerReview'
+                    },
                     start_date: {
-                        $lte: new Date()
+                        $lte: today
                     },
                     deadline: {
-                        $gte: new Date()
+                        $gte: today
                     }
                 }
             });
@@ -246,7 +258,6 @@ module.exports = {
                 return acc;
             }, {});
             try {
-
                 for (const key in activitiesPerCourse) {
                     const course = activitiesPerCourse[key];
                     course.forEach(async subsection => {
@@ -268,19 +279,26 @@ module.exports = {
                         await deleteGroups({ strapi, activityId: subsection.activity.id });
 
                         console.log("Creating groups for activity: ", subsection.activity.id);
-                        const { grupos } = await hacerGrupos(students, longitudGrupo);
+                        try {
 
-                        for (const pareja of grupos) {
-                            const group = await strapi.entityService.create('api::group.group', {
-                                data: {
-                                    activity: subsection.activity.id,
-                                    users: pareja.map(user => user.id),
-                                    publishedAt: new Date(),
-                                },
-                            });
+                            const { grupos } = await hacerGrupos(students, longitudGrupo);
+
+                            for (const pareja of grupos) {
+                                const group = await strapi.entityService.create('api::group.group', {
+                                    data: {
+                                        activity: subsection.activity.id,
+                                        users: pareja.map(user => user.id),
+                                        publishedAt: new Date(),
+                                    },
+                                });
+                            }
+                            console.log("Created groups for activity: ", subsection.activity.id);
                         }
-                        console.log("Created groups for activity: ", subsection.activity.id);
+                        catch (err) {
+                            console.log('\x1b[31m%s\x1b[0m', err);
+                        }
                     });
+
 
                 };
             }

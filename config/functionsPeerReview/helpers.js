@@ -1,6 +1,6 @@
-function hacerParejasPeerReview(objeto, usersToPair = 1) {
-    const elementos = [...Object.values(objeto)];
-    const longitud = elementos.length;
+function hacerParejasPeerReview(usuariosQueHanHechoLaActividad, usersToPair = 1) {
+    const copiaUsuarios = [...Object.values(usuariosQueHanHechoLaActividad)];
+    const longitud = copiaUsuarios.length;
     while (true) {
         if (longitud < 2 || usersToPair < 1 || usersToPair >= longitud) {
             if (usersToPair < 1) usersToPair = 1;
@@ -13,12 +13,12 @@ function hacerParejasPeerReview(objeto, usersToPair = 1) {
     const parejas = [];
     for (let i = 0; i < longitud; i++) {
         const pareja = [];
-        pareja.push(elementos[i]);
+        pareja.push(copiaUsuarios[i]);
         for (let j = 1; j <= usersToPair; j++) {
             const indexUsuarioACorregir = (i + j) % longitud;
             // no se puede corregir a uno mismo
             if (indexUsuarioACorregir !== i) {
-                const usuarioACorregir = elementos[indexUsuarioACorregir];
+                const usuarioACorregir = copiaUsuarios[indexUsuarioACorregir];
                 pareja.push(usuarioACorregir);
             }
         }
@@ -64,6 +64,36 @@ function hacerParejasGrupos(grupos, usersToPair = 1) {
         }
 
         parejas = parejas.concat(parejasPorGrupo);
+    }
+
+    return { grupos: parejas };
+
+}
+
+function hacerParejasGrupoAGrupos(grupos, usersToPair = 1) {
+    const longitud = grupos.length;
+    while (true) {
+        if (longitud < 2 || usersToPair < 1 || usersToPair >= longitud) {
+            if (usersToPair < 1) usersToPair = 1;
+            if (usersToPair >= longitud) usersToPair = longitud - 1;
+            if (longitud < 2) throw new Error('Cannot pair less than 2 groups');
+        }
+        else break;
+    }
+
+    const parejas = [];
+    for (let i = 0; i < longitud; i++) {
+        parejas.push([{ id: grupos[i].id }]);
+        for (let j = 1; j <= usersToPair; j++) {
+            const indexGrupoACorregir = (i + j) % longitud;
+            // no se puede corregir a uno mismo
+            if (indexGrupoACorregir !== i) {
+                const grupoACorregir = grupos[indexGrupoACorregir];
+                parejas[i].push({ id: grupoACorregir.id });
+
+            }
+        }
+
     }
 
     return { grupos: parejas };
@@ -117,8 +147,6 @@ async function hacerGrupos(students, usersToPair = 2) {
         let itr = 0
         for (const usuario of ultimoGrupo) {
             const index = (parejas.length - 1 - itr) % parejas.length;
-            console.log({ index });
-            console.log({ usuario });
             parejas[index].push(usuario);
             itr++;
 
@@ -132,7 +160,7 @@ async function hacerGrupos(students, usersToPair = 2) {
 async function crearActividadVinculandoUsuarios(ctx) {
     try {
 
-        let { idCourse, idMainActivity, idActivityPeerReview, evaluator, startDate, usersToPair = 1 } = ctx.request.body;
+        let { idCourse, idMainActivity, reviewInGroups = false, idActivityPeerReview, evaluator, startDate, usersToPair = 1 } = ctx.request.body;
         const { curso, usuariosDelCurso } = await obtenerUsuariosDeCurso(idCourse);
 
         if (evaluator === undefined &&
@@ -170,9 +198,15 @@ async function crearActividadVinculandoUsuarios(ctx) {
         let parejas;
 
         // usuarios que ha entregado la actividad
-        if (groupActivity) {
+
+        if (groupActivity && !reviewInGroups) {
             const gruposQueHanHechoLaActividad = qualifications.map(qualification => qualification.group);
             const { grupos } = hacerParejasGrupos(gruposQueHanHechoLaActividad, usersToPair);
+            parejas = grupos
+        }
+        else if (reviewInGroups) {
+            const gruposQueHanHechoLaActividad = qualifications.map(qualification => qualification.group);
+            const { grupos } = hacerParejasGrupoAGrupos(gruposQueHanHechoLaActividad, usersToPair);
             parejas = grupos
         }
         else {
@@ -180,32 +214,44 @@ async function crearActividadVinculandoUsuarios(ctx) {
             const { grupos } = hacerParejasPeerReview(usuariosQueHanHechoLaActividad, usersToPair);
             parejas = grupos
         }
-
         for (const pareja of parejas) {
             // find qualifications of all users
             const user = pareja[0];
             const parejaSinUser = pareja.filter(user => user.id !== pareja[0].id);
             let peerReviewqualifications;
 
-            if (groupActivity) {
+            if (groupActivity && !reviewInGroups) {
                 peerReviewqualifications = qualifications.
                     filter(qualification => parejaSinUser.
                         some(group => group.id === qualification.group.id)).map(qualification => qualification.id);
 
+            }
+            else if (reviewInGroups) {
+                peerReviewqualifications = qualifications.
+                    filter(qualification => parejaSinUser.some(group => {
+                        return qualification.group.id === group.id
+                    }))
+                    .map(qualification => qualification.id);
             }
             else {
                 peerReviewqualifications = qualifications.
                     filter(qualification => parejaSinUser.
                         some(user => user.id === qualification.user.id)).map(qualification => qualification.id);
             }
+            const data = {
+                activity: idActivityPeerReview,
+                evaluator: evaluator,
+                peer_review_qualifications: peerReviewqualifications,
+                publishedAt: startDate
+            }
+            if (reviewInGroups) {
+                data.group = user
+            }
+            else {
+                data.user = user;
+            }
             const qualification = await strapi.entityService.create('api::qualification.qualification', {
-                data: {
-                    activity: idActivityPeerReview,
-                    user: user,
-                    evaluator: evaluator,
-                    peer_review_qualifications: peerReviewqualifications,
-                    publishedAt: startDate
-                },
+                data: data
             });
         }
 

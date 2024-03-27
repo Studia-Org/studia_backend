@@ -59,9 +59,9 @@
     },
     "group": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "api::group.group",
-      "inversedBy": "qualification"
+      "inversedBy": "qualifications"
     },
     "PeerReviewAnswers": {
       "type": "relation",

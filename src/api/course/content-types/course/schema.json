@@ -71,6 +71,9 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "plugin::users-permissions.user"
+    },
+    "studentManaged": {
+      "type": "boolean"
     }
   }
 }
