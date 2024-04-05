@@ -4,7 +4,7 @@ const subsection = require('../src/api/subsection/controllers/subsection');
 
 
 module.exports = {
-    nuevaCronTask: {
+    completarSubsecciones: {
         task: async ({ strapi }) => {
             try {
 
@@ -51,12 +51,10 @@ module.exports = {
                     )
                 console.log("Subsections to update: ", subsections.length);
                 subsections.forEach(async subsection => {
-                    console.log("Subsection: ", subsection.id);
                     const students = subsection.section.course.students;
                     try {
                         students.forEach(async student => {
                             const subsectionsCompleted = student.subsections_completed;
-                            console.log("Subsections completed: ", subsectionsCompleted.map(subsection => subsection.id));
                             const alreadyCompleted = subsectionsCompleted.some(subsectionCompleted => subsectionCompleted.id === subsection.id);
                             if (!alreadyCompleted) {
                                 await strapi.entityService.update('plugin::users-permissions.user', student.id, {
@@ -79,8 +77,7 @@ module.exports = {
             }
         },
         options: {
-            // cada diez minutos
-            rule: '*/1 * * * *',
+            rule: '*/1 * * * *', // cada minuto
             tz: 'Europe/Madrid'
         }
     },
@@ -263,18 +260,17 @@ module.exports = {
                     course.forEach(async subsection => {
                         const { students, groups: groupsCourse } = subsection;
                         const longitudGrupo = subsection.activity.numberOfStudentsperGroup;
-
-                        const allStudentsHasGroup = groupsCourse.every((group) => {
-                            return group.users.every((user) => {
-                                return students.some((student) => {
-                                    return student.id === user.id
-                                        && group.activity.id === subsection.activity.id;
-                                });
-                            });
-                        }) && groupsCourse.length > 0;
-                        console.log("All students has group: " + subsection.activity.id, allStudentsHasGroup);
-                        if (allStudentsHasGroup) return;
-                        //delete all groups from this activity
+                        let counter = 0;
+                        groups.forEach((group) => {
+                            if (group.activity.id === subsection.activity.id) {
+                                counter += group.users.length
+                            }
+                        })
+                        const allStudentsHasGroup = counter === students.length && groupsCourse.length > 0;
+                        if (groupsCourse.length > 0) {
+                            console.log("At least one group (", groupsCourse.length, ") already created for activity: ", subsection.activity.id, " Skipping");
+                            return;
+                        }
 
                         await deleteGroups({ strapi, activityId: subsection.activity.id });
 
