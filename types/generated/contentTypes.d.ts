@@ -791,6 +791,7 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       Attribute.SetMinMax<{
         max: 100;
       }>;
+    SelfAssesmentRubrica: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

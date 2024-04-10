@@ -123,6 +123,9 @@
     "ponderationStudent": {
       "type": "integer",
       "max": 100
+    },
+    "SelfAssesmentRubrica": {
+      "type": "json"
     }
   }
 }
