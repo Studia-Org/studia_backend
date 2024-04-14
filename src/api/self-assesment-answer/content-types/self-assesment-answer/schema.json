@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "self_assesment_answers",
+  "info": {
+    "singularName": "self-assesment-answer",
+    "pluralName": "self-assesment-answers",
+    "displayName": "SelfAssesmentAnswers",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Answers": {
+      "type": "json"
+    },
+    "qualifications": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::qualification.qualification",
+      "inversedBy": "SelfAssesmentAnswers"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "SelfAssesmentAnswers"
+    }
+  }
+}

@@ -68,6 +68,12 @@
       "relation": "manyToMany",
       "target": "api::peer-review-answer.peer-review-answer",
       "mappedBy": "qualifications"
+    },
+    "SelfAssesmentAnswers": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::self-assesment-answer.self-assesment-answer",
+      "mappedBy": "qualifications"
     }
   }
 }

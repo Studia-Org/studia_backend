@@ -172,6 +172,12 @@
       "relation": "manyToMany",
       "target": "api::group.group",
       "inversedBy": "users"
+    },
+    "SelfAssesmentAnswers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::self-assesment-answer.self-assesment-answer",
+      "mappedBy": "user"
     }
   }
 }

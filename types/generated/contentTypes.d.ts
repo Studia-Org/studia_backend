@@ -691,6 +691,11 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToMany',
       'api::group.group'
     >;
+    SelfAssesmentAnswers: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToMany',
+      'api::self-assesment-answer.self-assesment-answer'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -1329,6 +1334,11 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
       'manyToMany',
       'api::peer-review-answer.peer-review-answer'
     >;
+    SelfAssesmentAnswers: Attribute.Relation<
+      'api::qualification.qualification',
+      'manyToMany',
+      'api::self-assesment-answer.self-assesment-answer'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1441,6 +1451,48 @@ export interface ApiSectionSection extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::section.section',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiSelfAssesmentAnswerSelfAssesmentAnswer
+  extends Schema.CollectionType {
+  collectionName: 'self_assesment_answers';
+  info: {
+    singularName: 'self-assesment-answer';
+    pluralName: 'self-assesment-answers';
+    displayName: 'SelfAssesmentAnswers';
+    description: '';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    Answers: Attribute.JSON;
+    qualifications: Attribute.Relation<
+      'api::self-assesment-answer.self-assesment-answer',
+      'manyToMany',
+      'api::qualification.qualification'
+    >;
+    user: Attribute.Relation<
+      'api::self-assesment-answer.self-assesment-answer',
+      'manyToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    publishedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::self-assesment-answer.self-assesment-answer',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::self-assesment-answer.self-assesment-answer',
       'oneToOne',
       'admin::user'
     > &
@@ -1644,6 +1696,7 @@ declare module '@strapi/types' {
       'api::qualification.qualification': ApiQualificationQualification;
       'api::questionnaire.questionnaire': ApiQuestionnaireQuestionnaire;
       'api::section.section': ApiSectionSection;
+      'api::self-assesment-answer.self-assesment-answer': ApiSelfAssesmentAnswerSelfAssesmentAnswer;
       'api::subsection.subsection': ApiSubsectionSubsection;
       'api::user-objective.user-objective': ApiUserObjectiveUserObjective;
       'api::user-response-questionnaire.user-response-questionnaire': ApiUserResponseQuestionnaireUserResponseQuestionnaire;
