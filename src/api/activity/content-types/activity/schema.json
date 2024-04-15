@@ -125,8 +125,11 @@
       "type": "integer",
       "max": 100
     },
-    "SelfAssesmentRubrica": {
-      "type": "json"
+    "selfAssesmentAnswer": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::self-assesment-answer.self-assesment-answer",
+      "mappedBy": "Activity"
     }
   }
 }

@@ -803,7 +803,11 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       Attribute.SetMinMax<{
         max: 100;
       }>;
-    SelfAssesmentRubrica: Attribute.JSON;
+    selfAssesmentAnswer: Attribute.Relation<
+      'api::activity.activity',
+      'oneToOne',
+      'api::self-assesment-answer.self-assesment-answer'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
@@ -1471,7 +1475,7 @@ export interface ApiSelfAssesmentAnswerSelfAssesmentAnswer
     draftAndPublish: true;
   };
   attributes: {
-    Answers: Attribute.JSON;
+    RubricAnswers: Attribute.JSON;
     qualifications: Attribute.Relation<
       'api::self-assesment-answer.self-assesment-answer',
       'manyToMany',
@@ -1481,6 +1485,12 @@ export interface ApiSelfAssesmentAnswerSelfAssesmentAnswer
       'api::self-assesment-answer.self-assesment-answer',
       'manyToOne',
       'plugin::users-permissions.user'
+    >;
+    QuestionnaireAnswers: Attribute.JSON;
+    Activity: Attribute.Relation<
+      'api::self-assesment-answer.self-assesment-answer',
+      'oneToOne',
+      'api::activity.activity'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
