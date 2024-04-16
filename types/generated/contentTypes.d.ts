@@ -1476,7 +1476,6 @@ export interface ApiSelfAssesmentAnswerSelfAssesmentAnswer
     draftAndPublish: true;
   };
   attributes: {
-    RubricAnswers: Attribute.JSON;
     qualifications: Attribute.Relation<
       'api::self-assesment-answer.self-assesment-answer',
       'manyToMany',
@@ -1493,6 +1492,7 @@ export interface ApiSelfAssesmentAnswerSelfAssesmentAnswer
       'oneToOne',
       'api::activity.activity'
     >;
+    RubricAnswers: Attribute.Text;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

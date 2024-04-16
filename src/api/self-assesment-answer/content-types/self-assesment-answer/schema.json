@@ -11,9 +11,6 @@
     "draftAndPublish": true
   },
   "attributes": {
-    "RubricAnswers": {
-      "type": "json"
-    },
     "qualifications": {
       "type": "relation",
       "relation": "manyToMany",
@@ -34,6 +31,9 @@
       "relation": "oneToOne",
       "target": "api::activity.activity",
       "inversedBy": "selfAssesmentAnswer"
+    },
+    "RubricAnswers": {
+      "type": "text"
     }
   }
 }
