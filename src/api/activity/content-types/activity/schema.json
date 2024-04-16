@@ -130,6 +130,9 @@
       "relation": "oneToOne",
       "target": "api::self-assesment-answer.self-assesment-answer",
       "mappedBy": "Activity"
+    },
+    "SelfAssesmentRubrica": {
+      "type": "json"
     }
   }
 }

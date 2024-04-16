@@ -808,6 +808,7 @@ export interface ApiActivityActivity extends Schema.CollectionType {
       'oneToOne',
       'api::self-assesment-answer.self-assesment-answer'
     >;
+    SelfAssesmentRubrica: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
