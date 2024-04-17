@@ -125,14 +125,14 @@
       "type": "integer",
       "max": 100
     },
-    "selfAssesmentAnswer": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::self-assesment-answer.self-assesment-answer",
-      "mappedBy": "Activity"
-    },
     "SelfAssesmentRubrica": {
       "type": "json"
+    },
+    "selfAssesmentAnswers": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::self-assesment-answer.self-assesment-answer",
+      "mappedBy": "activity"
     }
   }
 }

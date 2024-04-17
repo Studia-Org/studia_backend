@@ -26,11 +26,11 @@
     "QuestionnaireAnswers": {
       "type": "json"
     },
-    "Activity": {
+    "activity": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "manyToOne",
       "target": "api::activity.activity",
-      "inversedBy": "selfAssesmentAnswer"
+      "inversedBy": "selfAssesmentAnswers"
     },
     "RubricAnswers": {
       "type": "text"
