@@ -1,9 +1,18 @@
 
 module.exports = {
     async beforeCreate(event) {
-        const { group, activity, file, user } = event.params.data;
+        const { group, activity, file, user, updatedBy } = event.params.data;
         //check if qualification exists for the group
         //when evaluator uploads a qualification we dont need to check if the activity has passed
+        if (updatedBy !== undefined) {
+            // check who is updating the qualification
+            const author = (
+                await strapi.entityService.findMany("admin::user", {
+                    filters: { id: updatedBy }
+                })
+            )[0];
+            if (author) return;
+        }
         if (activity === undefined) {
             return
         }
@@ -46,9 +55,20 @@ module.exports = {
     },
     async beforeUpdate(event) {
         const { group, activity, file, updatedBy, qualification } = event.params.data;
-        //when evaluator uploads a qualification we dont need to check if the activity has passed
+
+        if (updatedBy !== undefined) {
+            // check who is updating the qualification
+            const author = (
+                await strapi.entityService.findMany("admin::user", {
+                    filters: { id: updatedBy }
+                })
+            )[0];
+            if (author) return;
+        }
+
         const { where: { id } } = event.params
 
+        //when evaluator uploads a qualification we dont need to check if the activity has passed
         if (activity === undefined) {
 
             const qualificationData = await strapi.entityService.findOne("api::qualification.qualification", id, {
@@ -78,15 +98,7 @@ module.exports = {
             }
             return
         }
-        if (updatedBy !== undefined) {
-            // check who is updating the qualification
-            const author = (
-                await strapi.entityService.findMany("admin::user", {
-                    filters: { id: updatedBy }
-                })
-            )[0];
-            if (author) return;
-        }
+
         const activityData = await strapi.db.query('api::activity.activity').findOne({
             where: {
                 id: activity
