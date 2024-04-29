@@ -1,3 +1,4 @@
+
 module.exports = {
     async beforeCreate(event) {
         const { group, activity, file, user } = event.params.data;
@@ -44,11 +45,37 @@ module.exports = {
 
     },
     async beforeUpdate(event) {
-        const { group, activity, file, updatedBy } = event.params.data;
+        const { group, activity, file, updatedBy, qualification } = event.params.data;
         //when evaluator uploads a qualification we dont need to check if the activity has passed
-
+        const { where: { id } } = event.params
 
         if (activity === undefined) {
+
+            const qualificationData = await strapi.entityService.findOne("api::qualification.qualification", id, {
+                populate: {
+                    activity: {
+                        populate: {
+                            subsection: {
+                                populate: {
+                                    section: {
+                                        populate: {
+                                            course: true
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    user: true
+                },
+            });
+            const activityID = qualificationData?.activity?.id
+            try {
+                await sendEmail({ qualification, activity: activityID, activityData: qualificationData.activity, user: qualificationData.user })
+            }
+            catch (error) {
+                console.log(error)
+            }
             return
         }
         if (updatedBy !== undefined) {
@@ -59,21 +86,78 @@ module.exports = {
                 })
             )[0];
             if (author) return;
-
         }
-
-
         const activityData = await strapi.db.query('api::activity.activity').findOne({
             where: {
                 id: activity
+            },
+            populate: {
+                subsection: {
+                    section: {
+                        course: true
+                    }
+                }
             }
         });
-
         if (activityData.deadline) {
             if (new Date(activityData.deadline) < new Date()) {
                 throw new Error("Activity deadline has passed");
             }
         }
+    },
+
+
+}
+
+async function sendEmail({ qualification, activity, activityData, user }) {
+
+    const courseID = activityData?.subsection?.section?.course?.id
+    const userName = user?.name
+    const userMail = user?.email
+    if (userMail === undefined) {
+        console.log("User has no email")
+        return
     }
 
+    if (qualification !== undefined) {
+        const Mailjet = require('node-mailjet');
+
+        const mailjet = new Mailjet.Client({
+            apiKey: process.env.MAILJET_AUTH_API,
+            apiSecret: process.env.MAILJET_AUTH_SECRET
+        });
+
+        const request = mailjet
+            .post('send', { version: 'v3.1' })
+            .request({
+                Messages: [
+                    {
+                        From: {
+                            Email: "uptitudeapp@gmail.com",
+                            Name: "Uptitudeapp"
+                        },
+                        To: [
+                            {
+                                Email: userMail,
+                                Name: userName
+                            }
+                        ],
+                        Subject: "Qualification updated",
+                        HTMLPart:
+                            `<div>
+                                <h2>Qualification updated for activity ${activityData.title}</h2>
+                               <a href="https://uptitude.netlify.app/app/courses/${courseID}/activity/${activity}">Go to activity</a>
+                            </div>`
+                    }
+                ]
+            })
+        request
+            .then((result) => {
+                console.log(result.body)
+            })
+            .catch((err) => {
+                console.log(err.statusCode)
+            })
+
+    }
 }

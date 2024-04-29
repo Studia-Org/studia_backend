@@ -172,12 +172,11 @@ module.exports = {
 
         },
         options: {
-            // rule: '0 0 0 * * *', // cada dia a las 00:00:00
             rule: '*/1 * * * *', // cada minuto
             tz: 'Europe/Madrid'
         }
     },
-    '*/1 * * * *': {
+    crearGrupos: {
         task: async ({ strapi }) => {
             const today = new Date();
             console.log("Running cron job to create groups");
@@ -250,10 +249,10 @@ module.exports = {
                         groups: groupsCourse
                     }];
                 }
-                // add groups
 
                 return acc;
             }, {});
+
             try {
                 for (const key in activitiesPerCourse) {
                     const course = activitiesPerCourse[key];
@@ -267,6 +266,7 @@ module.exports = {
                             }
                         })
                         const allStudentsHasGroup = counter === students.length && groupsCourse.length > 0;
+
                         if (groupsCourse.length > 0) {
                             console.log("At least one group (", groupsCourse.length, ") already created for activity: ", subsection.activity.id, " Skipping");
                             return;
@@ -303,7 +303,9 @@ module.exports = {
             }
         },
         options: {
+            rule: '*/1 * * * *',
             tz: 'Europe/Madrid'
+
         }
     },
 
