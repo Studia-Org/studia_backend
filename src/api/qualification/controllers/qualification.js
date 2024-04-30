@@ -34,8 +34,8 @@ module.exports = createCoreController('api::qualification.qualification',
                         }
                     });
                 }));
-
-                peers.forEach(async (peer) => {
+                const createdPeers = []
+                await peers.forEach(async (peer) => {
                     try {
                         if (peerInGroups) {
                             peer.groups.forEach(async (group) => {
@@ -51,7 +51,7 @@ module.exports = createCoreController('api::qualification.qualification',
                         }
                         else {
                             peer.users.forEach(async (user) => {
-
+                                createdPeers.push(user)
                                 const create_peer = await strapi.db.query("api::qualification.qualification").create({
                                     data: {
                                         user: [user],
@@ -67,6 +67,31 @@ module.exports = createCoreController('api::qualification.qualification',
                         console.log(err)
                     }
                 });
+
+                //check if peer_review_qualifications users has a qualification
+                if (!peerInGroups) {
+                    const qualifications = await strapi.db.query("api::qualification.qualification").findMany({
+                        where: {
+                            id: peers.map((peer) => peer.qualifications)
+                        },
+                        populate: {
+                            user: true
+                        }
+                    });
+                    const users = qualifications.map((qualification) => qualification.user.id)
+                    const usersWithoutQualification = users.filter((user) => !createdPeers.includes(user))
+
+                    for (const user of usersWithoutQualification) {
+                        const create_peer = await strapi.db.query("api::qualification.qualification").create({
+                            data: {
+                                user: [user],
+                                activity: peers[0].activity,
+                                publishedAt: new Date(),
+                            },
+                        });
+                    }
+                }
+
                 ctx.response.status = 200;
                 return ctx
             }
