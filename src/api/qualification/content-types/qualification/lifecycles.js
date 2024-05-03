@@ -17,8 +17,6 @@ module.exports = {
 
             if (evaluator == undefined) return
 
-            const { where: { id } } = event.params
-
             const activityData = await strapi.entityService.findOne("api::activity.activity", activity, {
                 populate: {
                     subsection: {
@@ -32,8 +30,9 @@ module.exports = {
                     }
                 },
             });
-            const student = await strapi.entityService.findOne("admin::user", user);
-
+            const student = await strapi.db.query('plugin::users-permissions.user').findOne({
+                where: { id: user }
+            })
             try {
                 await sendEmail({ qualification, activity: activity, activityData: activityData, user: student })
             }
@@ -153,7 +152,7 @@ async function sendEmail({ qualification, activity, activityData, user }) {
     const userName = user?.name
     const userMail = user?.email
     if (userMail === undefined) {
-        console.log("User has no email")
+        console.error("User has no email")
         return
     }
 
