@@ -1,7 +1,8 @@
+const { re } = require('../../../../../build/5998.7351dd45.chunk');
 
 module.exports = {
     async beforeCreate(event) {
-        const { group, activity, file, user, updatedBy } = event.params.data;
+        const { group, activity, file, user, updatedBy, evaluator, qualification } = event.params.data;
         //check if qualification exists for the group
         //when evaluator uploads a qualification we dont need to check if the activity has passed
         if (updatedBy !== undefined) {
@@ -13,7 +14,33 @@ module.exports = {
             )[0];
             if (author) return;
         }
-        if (activity === undefined) {
+        if (activity === undefined || (evaluator !== undefined)) {
+
+            if (evaluator == undefined) return
+
+            const { where: { id } } = event.params
+
+            const activityData = await strapi.entityService.findOne("api::activity.activity", activity, {
+                populate: {
+                    subsection: {
+                        populate: {
+                            section: {
+                                populate: {
+                                    course: true
+                                }
+                            }
+                        }
+                    }
+                },
+            });
+            const student = await strapi.entityService.findOne("admin::user", user);
+
+            try {
+                await sendEmail({ qualification, activity: activity, activityData: activityData, user: student })
+            }
+            catch (error) {
+                console.log(error)
+            }
             return
         }
         if (group !== undefined) {
