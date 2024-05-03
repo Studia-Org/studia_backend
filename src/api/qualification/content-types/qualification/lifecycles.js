@@ -1,4 +1,3 @@
-const { re } = require('../../../../../build/5998.7351dd45.chunk');
 
 module.exports = {
     async beforeCreate(event) {
