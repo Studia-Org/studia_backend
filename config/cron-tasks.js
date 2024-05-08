@@ -2,8 +2,20 @@ const { crearActividadVinculandoUsuarios, hacerGrupos } = require('../config/fun
 const { deleteGroups } = require('../src/api/group/helpers/helpers');
 const subsection = require('../src/api/subsection/controllers/subsection');
 
+const dotenv = require('dotenv');
+dotenv.config();
 
 module.exports = {
+    testCloudinary: {
+        task: async ({ strapi }) => {
+            console.log('hola');
+            console.log(process.env.CLOUDINARY_KEY);
+        },
+        options: {
+            rule: '*/10 * * * * *', // cada minuto
+            tz: 'Europe/Madrid'
+        }
+    },
     completarSubsecciones: {
         task: async ({ strapi }) => {
             try {
