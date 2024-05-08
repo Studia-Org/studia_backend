@@ -10,6 +10,8 @@ module.exports = {
         task: async ({ strapi }) => {
             console.log('hola');
             console.log(process.env.CLOUDINARY_KEY);
+            console.log(process.env.CLOUDINARY_SECRET);
+            console.log(process.env.CLOUDINARY_NAME);
         },
         options: {
             rule: '*/10 * * * * *', // cada minuto
