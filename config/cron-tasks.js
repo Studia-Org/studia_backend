@@ -6,18 +6,6 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 module.exports = {
-    testCloudinary: {
-        task: async ({ strapi }) => {
-            console.log('hola');
-            console.log(process.env.CLOUDINARY_KEY);
-            console.log(process.env.CLOUDINARY_SECRET);
-            console.log(process.env.CLOUDINARY_NAME);
-        },
-        options: {
-            rule: '*/10 * * * * *', // cada minuto
-            tz: 'Europe/Madrid'
-        }
-    },
     completarSubsecciones: {
         task: async ({ strapi }) => {
             try {

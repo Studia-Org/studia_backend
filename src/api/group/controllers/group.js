@@ -25,17 +25,30 @@ module.exports = createCoreController('api::group.group',
                     groups.forEach(async (group) => {
                         const lastElement = group.pop();
                         const id = lastElement.groupId;
-                        const update_group = await strapi.db.query("api::group.group").update({
-                            where: {
-                                id: id
-                            },
-                            data: {
-                                users: group.map(user => user.id),
-                                publishedAt: new Date(),
-                                activity: activityId
-                            },
-                        });
+                        if (id) {
+
+                            const update_group = await strapi.db.query("api::group.group").update({
+                                where: {
+                                    id: id
+                                },
+                                data: {
+                                    users: group.map(user => user.id),
+                                    publishedAt: new Date(),
+                                    activity: activityId
+                                },
+                            });
+                        }
+                        else {
+                            const create_group = await strapi.db.query("api::group.group").create({
+                                data: {
+                                    users: group.map(user => user.id),
+                                    publishedAt: new Date(),
+                                    activity: activityId
+                                },
+                            });
+                        }
                     });
+
                 }
                 else {
                     await deleteGroups({ strapi, activityId });
