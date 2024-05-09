@@ -35,38 +35,86 @@ module.exports = createCoreController('api::qualification.qualification',
                     });
                 }));
                 const createdPeers = []
-                await peers.forEach(async (peer) => {
-                    try {
-                        if (peerInGroups) {
-                            peer.groups.forEach(async (group) => {
-                                const create_peer = await strapi.db.query("api::qualification.qualification").create({
-                                    data: {
-                                        group: [group],
-                                        activity: peer.activity,
-                                        peer_review_qualifications: peer.qualifications,
-                                        publishedAt: new Date(),
-                                    },
-                                });
+                const groupsWithQualifcationToReview = {}
+                const usersWithQualificationToReview = {}
+                const activityId = peers[0].activity
+                peers.map(async (peer) => {
+                    if (peerInGroups) {
+                        peer.groups.forEach((group) => {
+                            if (groupsWithQualifcationToReview[group]) {
+                                groupsWithQualifcationToReview[group].push(peer.qualifications)
+                            }
+                            else {
+                                groupsWithQualifcationToReview[group] = [peer.qualifications]
+                            }
+                        })
+                        await Object.entries(groupsWithQualifcationToReview).forEach(async ([group, qualifications]) => {
+                            const create_peer = await strapi.db.query("api::qualification.qualification").create({
+                                data: {
+                                    group: [group],
+                                    activity: activityId,
+                                    peer_review_qualifications: qualifications,
+                                    publishedAt: new Date(),
+                                },
                             });
-                        }
-                        else {
-                            peer.users.forEach(async (user) => {
-                                createdPeers.push(user)
-                                const create_peer = await strapi.db.query("api::qualification.qualification").create({
-                                    data: {
-                                        user: [user],
-                                        activity: peer.activity,
-                                        peer_review_qualifications: peer.qualifications,
-                                        publishedAt: new Date(),
-                                    },
-                                });
-                            });
-                        }
-
-                    } catch (err) {
-                        console.log(err)
+                        })
                     }
-                });
+                    else {
+                        peer.users.forEach(async (user) => {
+                            if (usersWithQualificationToReview[user]) {
+                                usersWithQualificationToReview[user].push(peer.qualifications)
+                            }
+                            else {
+                                usersWithQualificationToReview[user] = [peer.qualifications]
+                            }
+                        })
+                        await Object.entries(usersWithQualificationToReview).forEach(async ([user, qualifications]) => {
+                            createdPeers.push(user)
+                            const create_peer = await strapi.db.query("api::qualification.qualification").create({
+                                data: {
+                                    user: [user],
+                                    activity: activityId,
+                                    peer_review_qualifications: qualifications,
+                                    publishedAt: new Date(),
+                                },
+                            });
+                        })
+                    }
+                })
+
+
+                // await peers.forEach(async (peer) => {
+                //     try {
+                //         if (peerInGroups) {
+                //             peer.groups.forEach(async (group) => {
+                //                 const create_peer = await strapi.db.query("api::qualification.qualification").create({
+                //                     data: {
+                //                         group: [group],
+                //                         activity: peer.activity,
+                //                         peer_review_qualifications: peer.qualifications,
+                //                         publishedAt: new Date(),
+                //                     },
+                //                 });
+                //             });
+                //         }
+                //         else {
+                //             peer.users.forEach(async (user) => {
+                //                 createdPeers.push(user)
+                //                 const create_peer = await strapi.db.query("api::qualification.qualification").create({
+                //                     data: {
+                //                         user: [user],
+                //                         activity: peer.activity,
+                //                         peer_review_qualifications: peer.qualifications,
+                //                         publishedAt: new Date(),
+                //                     },
+                //                 });
+                //             });
+                //         }
+
+                //     } catch (err) {
+                //         console.log(err)
+                //     }
+                // });
 
                 //check if peer_review_qualifications users has a qualification
                 if (!peerInGroups) {
