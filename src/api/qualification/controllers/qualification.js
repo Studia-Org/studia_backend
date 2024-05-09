@@ -38,6 +38,7 @@ module.exports = createCoreController('api::qualification.qualification',
                 const groupsWithQualifcationToReview = {}
                 const usersWithQualificationToReview = {}
                 const activityId = peers[0].activity
+
                 peers.map(async (peer) => {
                     if (peerInGroups) {
                         peer.groups.forEach((group) => {
@@ -48,16 +49,7 @@ module.exports = createCoreController('api::qualification.qualification',
                                 groupsWithQualifcationToReview[group] = [peer.qualifications]
                             }
                         })
-                        await Object.entries(groupsWithQualifcationToReview).forEach(async ([group, qualifications]) => {
-                            const create_peer = await strapi.db.query("api::qualification.qualification").create({
-                                data: {
-                                    group: [group],
-                                    activity: activityId,
-                                    peer_review_qualifications: qualifications,
-                                    publishedAt: new Date(),
-                                },
-                            });
-                        })
+
                     }
                     else {
                         peer.users.forEach(async (user) => {
@@ -68,20 +60,33 @@ module.exports = createCoreController('api::qualification.qualification',
                                 usersWithQualificationToReview[user] = [peer.qualifications]
                             }
                         })
-                        await Object.entries(usersWithQualificationToReview).forEach(async ([user, qualifications]) => {
-                            createdPeers.push(user)
-                            const create_peer = await strapi.db.query("api::qualification.qualification").create({
-                                data: {
-                                    user: [user],
-                                    activity: activityId,
-                                    peer_review_qualifications: qualifications,
-                                    publishedAt: new Date(),
-                                },
-                            });
-                        })
                     }
                 })
-
+                if (peerInGroups) {
+                    await Object.entries(groupsWithQualifcationToReview).forEach(async ([group, qualifications]) => {
+                        const create_peer = await strapi.db.query("api::qualification.qualification").create({
+                            data: {
+                                group: [group],
+                                activity: activityId,
+                                peer_review_qualifications: qualifications,
+                                publishedAt: new Date(),
+                            },
+                        });
+                    })
+                }
+                else {
+                    await Object.entries(usersWithQualificationToReview).forEach(async ([user, qualifications]) => {
+                        createdPeers.push(user)
+                        const create_peer = await strapi.db.query("api::qualification.qualification").create({
+                            data: {
+                                user: [user],
+                                activity: activityId,
+                                peer_review_qualifications: qualifications,
+                                publishedAt: new Date(),
+                            },
+                        });
+                    })
+                }
 
                 // await peers.forEach(async (peer) => {
                 //     try {
