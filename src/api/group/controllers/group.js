@@ -39,6 +39,7 @@ module.exports = createCoreController('api::group.group',
                             });
                         }
                         else {
+                            group.push(lastElement);
                             const create_group = await strapi.db.query("api::group.group").create({
                                 data: {
                                     users: group.map(user => user.id),
