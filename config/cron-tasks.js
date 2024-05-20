@@ -230,32 +230,31 @@ module.exports = {
                 }
             })
 
-
-            const activitiesPerCourse = subsections.reduce((acc, subsection) => {
-                const course = subsection.section?.course?.id;
-                const groupsCourse = groups?.filter(group => group.activity.id === subsection.activity.id);
-
-                if (acc[course]) {
-                    acc[course].push({
-                        activity: subsection.activity,
-                        subsection: subsection,
-                        students: subsection.section.course.students,
-                        groups: groupsCourse
-                    });
-
-                } else {
-                    acc[course] = [{
-                        activity: subsection.activity,
-                        subsection: subsection,
-                        students: subsection.section.course.students,
-                        groups: groupsCourse
-                    }];
-                }
-
-                return acc;
-            }, {});
-
             try {
+                const activitiesPerCourse = subsections.reduce((acc, subsection) => {
+                    const course = subsection.section?.course?.id;
+                    const groupsCourse = groups?.filter(group => group.activity.id === subsection.activity.id);
+
+                    if (acc[course]) {
+                        acc[course].push({
+                            activity: subsection.activity,
+                            subsection: subsection,
+                            students: subsection.section.course.students,
+                            groups: groupsCourse
+                        });
+
+                    } else {
+                        acc[course] = [{
+                            activity: subsection.activity,
+                            subsection: subsection,
+                            students: subsection.section.course.students,
+                            groups: groupsCourse
+                        }];
+                    }
+
+                    return acc;
+                }, {});
+
                 for (const key in activitiesPerCourse) {
                     const course = activitiesPerCourse[key];
                     course.forEach(async subsection => {
