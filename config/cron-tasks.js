@@ -234,7 +234,10 @@ module.exports = {
             const activitiesPerCourse = subsections.reduce((acc, subsection) => {
                 const course = subsection.section?.course?.id;
                 const groupsCourse = groups?.filter(group => group.activity.id === subsection.activity.id);
-                console.log(subsection.section.course.id, subsection.section.course.students)
+                if (subsection.section.course == null) {
+                    console.log("Course is null")
+                    console.log(subsection)
+                }
                 if (acc[course]) {
                     acc[course].push({
                         activity: subsection.activity,
