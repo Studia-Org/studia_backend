@@ -196,7 +196,7 @@ module.exports = {
                     }
                 }
             });
-            console.log("Activities to make groups: ", activitiesToMakeGroups.length);
+            console.log("Activities to make groups: ", activitiesToMakeGroups.map(activity => activity.id));
 
             const groups = await strapi.entityService.findMany('api::group.group', {
                 filters: {
@@ -234,7 +234,7 @@ module.exports = {
                 const activitiesPerCourse = subsections.reduce((acc, subsection) => {
                     const course = subsection.section?.course?.id;
                     const groupsCourse = groups?.filter(group => group.activity.id === subsection.activity.id);
-
+                    console.log(subsection.section)
                     if (acc[course]) {
                         acc[course].push({
                             activity: subsection.activity,
