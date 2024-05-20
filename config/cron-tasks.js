@@ -235,8 +235,7 @@ module.exports = {
                 const course = subsection.section?.course?.id;
                 const groupsCourse = groups?.filter(group => group.activity.id === subsection.activity.id);
                 if (subsection.section.course == null) {
-                    console.log("Course is null")
-                    console.log(subsection)
+                    return acc;
                 }
                 if (acc[course]) {
                     acc[course].push({
