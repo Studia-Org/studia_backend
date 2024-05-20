@@ -1,8 +1,10 @@
 
+const { errors } = require('@strapi/utils');
+const { ApplicationError } = errors;
+
 module.exports = {
     async beforeCreate(event) {
         const { group, activity, file, user, updatedBy, evaluator, qualification } = event.params.data;
-        //check if qualification exists for the group
         //when evaluator uploads a qualification we dont need to check if the activity has passed
         if (updatedBy !== undefined) {
             // check who is updating the qualification
@@ -12,6 +14,18 @@ module.exports = {
                 })
             )[0];
             if (author) return;
+
+        }
+
+        if (evaluator !== undefined) {
+
+            const teacher = await strapi.db.query('plugin::users-permissions.user').findOne({
+                where: { id: evaluator }
+            })
+            if (teacher.role_str === "professor") {
+                console.log("Teacher is updating qualification")
+                return
+            }
         }
         if (activity === undefined || (evaluator !== undefined)) {
 
@@ -50,11 +64,11 @@ module.exports = {
             });
 
             if (qualification) {
-                throw new Error("Qualification already exists for the group and activity");;
+                throw new ApplicationError("Qualification already exists for the group and activity");
             }
         }
-        console.log("before create qualification user", user?.id)
-        if (user !== undefined) {
+
+        if (user !== undefined && group === undefined) {
             const userQualification = await strapi.db.query('api::qualification.qualification').findOne({
                 where: {
                     user: user,
@@ -63,7 +77,7 @@ module.exports = {
             });
 
             if (userQualification) {
-                throw new Error("Qualification already exists for the user and activity");;
+                throw new ApplicationError("Qualification already exists for the user and activity");
             }
         }
         const activityData = await strapi.db.query('api::activity.activity').findOne({
@@ -73,13 +87,13 @@ module.exports = {
         });
         if (activityData.deadline) {
             if (new Date(activityData.deadline) < new Date()) {
-                throw new Error("Activity deadline has passed");
+                throw new ApplicationError("Activity deadline has passed");
             }
         }
 
     },
     async beforeUpdate(event) {
-        const { group, activity, file, updatedBy, qualification } = event.params.data;
+        const { group, activity, file, updatedBy, qualification, evaluator } = event.params.data;
 
         if (updatedBy !== undefined) {
             // check who is updating the qualification
@@ -90,7 +104,16 @@ module.exports = {
             )[0];
             if (author) return;
         }
+        if (evaluator !== undefined) {
 
+            const teacher = await strapi.db.query('plugin::users-permissions.user').findOne({
+                where: { id: evaluator }
+            })
+            if (teacher.role_str === "professor") {
+                console.log("Teacher is updating qualification")
+                return
+            }
+        }
         const { where: { id } } = event.params
 
         //when evaluator uploads a qualification we dont need to check if the activity has passed
@@ -138,7 +161,7 @@ module.exports = {
         });
         if (activityData.deadline) {
             if (new Date(activityData.deadline) < new Date()) {
-                throw new Error("Activity deadline has passed");
+                throw new ApplicationError("Activity deadline has passed");
             }
         }
     },
