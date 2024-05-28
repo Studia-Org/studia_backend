@@ -102,8 +102,8 @@ module.exports = createCoreController('api::group.group',
                     const userCreated = await strapi.entityService.create('plugin::users-permissions.user', {
                         data: {
                             ...user,
-                            profile_photo: user.profile_photo ? user.profile_photo : 431,//2,
-                            role: user.isTeacher ? 4 : 19,//cambiar a 3
+                            profile_photo: user.profile_photo ? user.profile_photo : 2,//431 dev,
+                            role: user.isTeacher ? 4 : 3,//cambiar a 19 dev
                             role_str: user.isTeacher ? 'professor' : 'student',
                             provider: 'local'
                         }
