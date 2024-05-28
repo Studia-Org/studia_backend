@@ -99,16 +99,15 @@ module.exports = createCoreController('api::group.group',
                     seenUsernames.add(user.username);
                     seenNames.add(user.name);
 
-                    // Create user
                     const userCreated = await strapi.entityService.create('plugin::users-permissions.user', {
                         data: {
                             ...user,
-                            profile_photo: user.profile_photo ? user.profile_photo : 2,
-                            role: user.isTeacher ? 4 : 3,
-                            role_str: user.isTeacher ? 'professor' : 'student'
+                            profile_photo: user.profile_photo ? user.profile_photo : 431,//2,
+                            role: user.isTeacher ? 4 : 19,//cambiar a 3
+                            role_str: user.isTeacher ? 'professor' : 'student',
+                            provider: 'local'
                         }
                     });
-
                     usersCreated.push(userCreated);
                 }
 
