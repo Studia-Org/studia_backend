@@ -37,6 +37,13 @@
       "relation": "oneToOne",
       "target": "api::subsection.subsection",
       "inversedBy": "questionnaire"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "scaling",
+        "standard"
+      ]
     }
   }
 }

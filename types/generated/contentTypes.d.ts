@@ -1395,6 +1395,7 @@ export interface ApiQuestionnaireQuestionnaire extends Schema.CollectionType {
       'oneToOne',
       'api::subsection.subsection'
     >;
+    type: Attribute.Enumeration<['scaling', 'standard']>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
