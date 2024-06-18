@@ -1160,6 +1160,7 @@ export interface ApiGroupGroup extends Schema.CollectionType {
       'oneToMany',
       'api::peer-review-answer.peer-review-answer'
     >;
+    GroupName: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;

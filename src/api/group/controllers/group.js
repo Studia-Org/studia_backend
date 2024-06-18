@@ -25,8 +25,8 @@ module.exports = createCoreController('api::group.group',
                     groups.forEach(async (group) => {
                         const lastElement = group.pop();
                         const id = lastElement.groupId;
+                        const groupName = lastElement.GroupName;
                         if (id) {
-
                             const update_group = await strapi.db.query("api::group.group").update({
                                 where: {
                                     id: id
@@ -34,7 +34,8 @@ module.exports = createCoreController('api::group.group',
                                 data: {
                                     users: group.map(user => user.id),
                                     publishedAt: new Date(),
-                                    activity: activityId
+                                    activity: activityId,
+                                    GroupName: groupName
                                 },
                             });
                         }
@@ -44,12 +45,12 @@ module.exports = createCoreController('api::group.group',
                                 data: {
                                     users: group.map(user => user.id),
                                     publishedAt: new Date(),
-                                    activity: activityId
+                                    activity: activityId,
+                                    GroupName: groupName
                                 },
                             });
                         }
                     });
-
                 }
                 else {
                     await deleteGroups({ strapi, activityId });
@@ -63,7 +64,6 @@ module.exports = createCoreController('api::group.group',
                         });
                     });
                 }
-
                 ctx.response.status = 200;
                 return ctx
             }
@@ -72,7 +72,6 @@ module.exports = createCoreController('api::group.group',
                 ctx.response.status = 500;
                 return ctx.internalServerError({ result: 'Error creating groups' });
             }
-
         },
         async createUsers(ctx) {
             const { users } = ctx.request.body;

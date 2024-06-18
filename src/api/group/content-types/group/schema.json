@@ -33,6 +33,9 @@
       "relation": "oneToMany",
       "target": "api::peer-review-answer.peer-review-answer",
       "mappedBy": "group"
+    },
+    "GroupName": {
+      "type": "string"
     }
   }
 }
