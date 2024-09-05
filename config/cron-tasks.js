@@ -234,7 +234,7 @@ module.exports = {
             const activitiesPerCourse = subsections.reduce((acc, subsection) => {
                 const course = subsection.section?.course?.id;
                 const groupsCourse = groups?.filter(group => group.activity.id === subsection.activity.id);
-                if (subsection.section.course == null) {
+                if (subsection?.section?.course == null) {
                     return acc;
                 }
                 if (acc[course]) {
