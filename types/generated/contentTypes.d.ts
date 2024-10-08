@@ -761,7 +761,11 @@ export interface ApiActivityActivity extends Schema.CollectionType {
           'Teamwork',
           'Creative and entrepreneurial capacity',
           'Sustainability',
-          'Communicative ability'
+          'Communicative ability',
+          'Citizenship competence',
+          'Digital competence',
+          'Entrepreneurial competence',
+          ''
         ]
       >;
     PeerReviewRubrica: Attribute.JSON;

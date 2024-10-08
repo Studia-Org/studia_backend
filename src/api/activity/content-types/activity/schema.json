@@ -64,7 +64,11 @@
         "Teamwork",
         "Creative and entrepreneurial capacity",
         "Sustainability",
-        "Communicative ability"
+        "Communicative ability",
+        "Citizenship competence",
+        "Digital competence",
+        "Entrepreneurial competence",
+        ""
       ],
       "customField": "plugin::multi-select.multi-select"
     },
