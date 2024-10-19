@@ -781,7 +781,8 @@ export interface ApiActivityActivity extends Schema.CollectionType {
         'forum',
         'questionnaire',
         'thinkAloud',
-        'selfAssessment'
+        'selfAssessment',
+        'reflection'
       ]
     >;
     task_to_review: Attribute.Relation<

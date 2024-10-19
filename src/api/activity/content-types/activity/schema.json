@@ -89,7 +89,8 @@
         "forum",
         "questionnaire",
         "thinkAloud",
-        "selfAssessment"
+        "selfAssessment",
+        "reflection"
       ]
     },
     "task_to_review": {
