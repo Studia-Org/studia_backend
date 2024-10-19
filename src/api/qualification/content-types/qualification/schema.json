@@ -74,6 +74,9 @@
       "relation": "manyToMany",
       "target": "api::self-assesment-answer.self-assesment-answer",
       "mappedBy": "qualifications"
+    },
+    "reflection_answers": {
+      "type": "json"
     }
   }
 }
