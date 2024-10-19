@@ -1350,6 +1350,7 @@ export interface ApiQualificationQualification extends Schema.CollectionType {
       'manyToMany',
       'api::self-assesment-answer.self-assesment-answer'
     >;
+    reflection_answers: Attribute.JSON;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     publishedAt: Attribute.DateTime;
