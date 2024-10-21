@@ -24,7 +24,7 @@ module.exports = ({ env }) => {
           ),
         },
       },
-      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 100) },
+      pool: { min: env.int('DATABASE_POOL_MIN', 2), max: env.int('DATABASE_POOL_MAX', 30) },
     },
     mysql2: {
       connection: {
